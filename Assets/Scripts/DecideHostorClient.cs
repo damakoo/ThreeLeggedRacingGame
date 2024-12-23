@@ -12,25 +12,59 @@ public class DecideHostorClient : MonoBehaviour
     [SerializeField] GameObject WaitforAnother;
     bool _DecideHostorClient = false;
     public bool isConnecting = false;
+    public int ConnectedNumber = 0;
     public PracticeSet _practiceSet { get; set; }
-    private void Start()
-    {
-        _BlackJackManager._hostorclient = BlackJackManager.HostorClient.Host;
-    }
 
-    private void Update()
+    // Update is called once per frame
+    void Update()
     {
-        if(_practiceSet != null)
+        if (isConnecting)
         {
-            _BlackJackManager.SetPracticeSet(_practiceSet);
-            if (_BlackJackManager._hostorclient == BlackJackManager.HostorClient.Host)
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && !_DecideHostorClient)
             {
-                _BlackJackManager.UpdateParameter();
-                _BlackJackManager.PhotonGameStartUI();
+                _BlackJackManager._hostorclient = BlackJackManager.HostorClient.Host;
+                _BlackJackManager.MyConnectedNumber = 1;
+                _DecideHostorClient = true;
             }
-            WaitforAnother.SetActive(false);
-            this.gameObject.SetActive(false);
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 2 && !_DecideHostorClient)
+            {
+                _BlackJackManager._hostorclient = BlackJackManager.HostorClient.Client;
+                _BlackJackManager.MyConnectedNumber = 2;
+                _DecideHostorClient = true;
+            }
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 3 && !_DecideHostorClient)
+            {
+                _BlackJackManager._hostorclient = BlackJackManager.HostorClient.Client;
+                _BlackJackManager.MyConnectedNumber = 3;
+                _DecideHostorClient = true;
+            }
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 4 && !_DecideHostorClient)
+            {
+                _BlackJackManager._hostorclient = BlackJackManager.HostorClient.Client;
+                _BlackJackManager.MyConnectedNumber = 4;
+                _DecideHostorClient = true;
+            }
 
+            if (PhotonNetwork.CurrentRoom.PlayerCount > 3 && _DecideHostorClient)
+            {
+                if (_BlackJackManager._hostorclient == BlackJackManager.HostorClient.Client)
+                {
+                    PhotonView[] photonviews = FindObjectsOfType<PhotonView>();
+                    foreach (var _photonview in photonviews)
+                    {
+                        if (!_photonview.IsMine) _practiceSet = _photonview.gameObject.GetComponent<PracticeSet>();
+                    }
+                }
+                _BlackJackManager.SetPracticeSet(_practiceSet);
+                if (_BlackJackManager._hostorclient == BlackJackManager.HostorClient.Host)
+                {
+                    _BlackJackManager.UpdateParameter();
+                    _BlackJackManager.PhotonGameStartUI();
+                }
+                WaitforAnother.SetActive(false);
+                this.gameObject.SetActive(false);
+            }
         }
     }
 }
+

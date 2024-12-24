@@ -1076,7 +1076,8 @@ MonoBehaviour:
   BlackWriteLine: {fileID: 1988371133}
   RedWriteLine: {fileID: 1758386815}
   _MovableArea: {fileID: 1192107895}
-  AffordedDisntace: 1
+  MouseMoveRatio: 30
+  AffordedDisntace: 1.4
 --- !u!4 &603039266
 Transform:
   m_ObjectHideFlags: 0

@@ -29,10 +29,10 @@ public class BlackJackManager : MonoBehaviour
     [SerializeField] GameObject TimeLimit_notBet;
     [SerializeField] GameObject AllTrialFinishedUI;
     [SerializeField] TextMeshProUGUI TimeLimitObj_str;
-    [SerializeField] GameObject Clubs;
-    [SerializeField] GameObject Spades;
-    [SerializeField] GameObject Hearts;
-    [SerializeField] GameObject Diamonds;
+    public GameObject Clubs;
+    public GameObject Spades;
+    public GameObject Hearts;
+    public GameObject Diamonds;
     [SerializeField] GameObject ClubsInitialpos;
     [SerializeField] GameObject SpadesInitialpos;
     [SerializeField] GameObject HeartsInitialpos;

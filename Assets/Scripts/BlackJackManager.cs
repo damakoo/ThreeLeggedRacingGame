@@ -226,7 +226,7 @@ public class BlackJackManager : MonoBehaviour
         {
             if (_PracticeSet.Hearts.x < StartLinePos.transform.position.x && _PracticeSet.Hearts.x + DeltacursorPosition.x > StartLinePos.transform.position.x)
             {
-                if (BlackDistance < AffordedDisntace)
+                if (RedDistance < AffordedDisntace)
                 {
                     MovedPos = _PracticeSet.Hearts + DeltacursorPosition;
                 }
@@ -245,7 +245,7 @@ public class BlackJackManager : MonoBehaviour
         {
             if (_PracticeSet.Diamonds.x < StartLinePos.transform.position.x && _PracticeSet.Diamonds.x + DeltacursorPosition.x > StartLinePos.transform.position.x)
             {
-                if (BlackDistance < AffordedDisntace)
+                if (RedDistance < AffordedDisntace)
                 {
                     MovedPos = _PracticeSet.Diamonds + DeltacursorPosition;
                 }

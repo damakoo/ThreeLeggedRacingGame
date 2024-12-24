@@ -12,10 +12,12 @@ public class BlackJackRecorder : MonoBehaviour
     [SerializeField] BlackJackManager _BlackJackManager;
     private PracticeSet _PracticeSet => _BlackJackManager._PracticeSet;
     //[SerializeField] CSVWriter _CSVWriter;
+    public List<Vector3> ClubsPos { get; set; } = new List<Vector3>();
+    public List<Vector3> SpadesPos { get; set; } = new List<Vector3>();
+    public List<Vector3> HeartsPos { get; set; } = new List<Vector3>();
+    public List<Vector3> DiamondsPos { get; set; } = new List<Vector3>();
     public List<int> MyNumberList { get; set; } = new List<int>();
     public List<int> YourNumberList { get; set; } = new List<int>();
-    public List<int> MySelectedBetList { get; set; } = new List<int>();
-    public List<int> YourSelectedBetList { get; set; } = new List<int>();
     public List<int> ScoreList { get; set; } = new List<int>();
     private List<List<int>> MyCardsPracticeList => _PracticeSet.MyCardsPracticeList;
     private List<List<int>> YourCardsPracticeList => _PracticeSet.YourCardsPracticeList;
@@ -24,15 +26,19 @@ public class BlackJackRecorder : MonoBehaviour
     private List<float> MySelectedTime => _PracticeSet.MySelectedTime;
     private List<float> YourSelectedTime => _PracticeSet.YourSelectedTime;
     public int Trial = 1;
-
-    public void RecordResult(int mynumber, int yournumber, int score, int mybet, int yourbet)
+    private void FixedUpdate()
     {
-        MyNumberList.Add(mynumber);
-        YourNumberList.Add(yournumber);
-        MySelectedBetList.Add(mybet);
-        YourSelectedBetList.Add(yourbet);
-        ScoreList.Add(score);
+        if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.SelectCards)
+        {
+            ClubsPos.Add(_PracticeSet.Clubs);
+            SpadesPos.Add(_PracticeSet.Spades);
+            HeartsPos.Add(_PracticeSet.Hearts);
+            DiamondsPos.Add(_PracticeSet.Diamonds);
+        }
+
+
     }
+
     private string _Title;
     private void Start()
     {
@@ -41,22 +47,19 @@ public class BlackJackRecorder : MonoBehaviour
     string WriteContent()
     {
         string Content = "";
-        Content += "FieldNumber";
-        for (int i = 0; i < MyCardsPracticeList[0].Count; i++) Content += ",MyCards" + (i + 1).ToString();
-        for (int i = 0; i < YourCardsPracticeList[0].Count; i++) Content += ",YourCards" + (i + 1).ToString();
-        Content += ",MyNumber,YourNumber,MySelectedTime,YourSelectedTime,MySelectedQuestionnaire,YourSelectedQuestionnaire,Score,Trial,isHost\n";
-        for (int i = 0; i < TrialAll; i++)
+        Content += "ClubsPos_x,ClubsPos_y,ClubsPos_z,SpadesPos_x,SpadesPos_y,SpadesPos_z,HeartsPos_x,HeartsPos_y,HeartsPos_z,DiamondsPos_x,DiamondsPos_y,DiamondsPos_z\n";
+        for (int i = 0; i < ClubsPos.Count; i++)
         {
-            Content += FieldCardsPracticeList[i].ToString();
-            for (int j = 0; j < MyCardsPracticeList[i].Count; j++) Content += "," + MyCardsPracticeList[i][j].ToString();
-            for (int j = 0; j < YourCardsPracticeList[i].Count; j++) Content += "," + YourCardsPracticeList[i][j].ToString();
-            Content += "," + MyNumberList[i].ToString() + "," + YourNumberList[i].ToString() + "," + MySelectedTime[i].ToString() + "," + YourSelectedTime[i].ToString() + "," + MySelectedBetList[i].ToString() + "," + YourSelectedBetList[i].ToString() + "," + ScoreList[i].ToString() + "," + Trial.ToString() + "," + _BlackJackManager._hostorclient.ToString() + "\n";
+            Content += ClubsPos[i].x.ToString() + "," + ClubsPos[i].y.ToString() + "," + ClubsPos[i].z.ToString() + ",";
+            Content += SpadesPos[i].x.ToString() + "," + SpadesPos[i].y.ToString() + "," + SpadesPos[i].z.ToString() + ",";
+            Content += HeartsPos[i].x.ToString() + "," + HeartsPos[i].y.ToString() + "," + HeartsPos[i].z.ToString() + ",";
+            Content += DiamondsPos[i].x.ToString() + "," + DiamondsPos[i].y.ToString() + "," + DiamondsPos[i].z.ToString() + "\n";
         }
         return Content;
     }
-    public void ExportCsv()
+    public void ExportCsv(string wintype)
     {
-        DownloadFile("result_blackjack_" + _Title + "_" + Trial.ToString() + ".csv", WriteContent());
+        DownloadFile("result_blackjack_" + _Title + "_" + Trial.ToString() +"_"+ wintype + "win" +  ".csv", WriteContent());
     }
 
     /*public void WriteResult()
@@ -77,10 +80,9 @@ public class BlackJackRecorder : MonoBehaviour
     }*/
     public void Initialize()
     {
-        MyNumberList = new List<int>();
-        YourNumberList = new List<int>();
-        MySelectedBetList = new List<int>();
-        YourSelectedBetList = new List<int>();
-        ScoreList = new List<int>();
+        ClubsPos = new List<Vector3>();
+        SpadesPos = new List<Vector3>();
+        HeartsPos = new List<Vector3>();
+        DiamondsPos = new List<Vector3>();
     }
 }

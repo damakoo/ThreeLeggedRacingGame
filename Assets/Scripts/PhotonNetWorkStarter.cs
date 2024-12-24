@@ -19,9 +19,11 @@ public class PhotonNetWorkStarter: MonoBehaviourPunCallbacks
     {
         GameObject practiceset = PhotonNetwork.Instantiate("PracticeSet", Vector3.zero, Quaternion.identity);
         _DecideHostorClient._practiceSet = practiceset.GetComponent<PracticeSet>();
-        _DecideHostorClient.isConnecting = true;
+        
         // é©ï™Ç™âΩî‘ñ⁄Ç…éQâ¡ÇµÇΩÇ©Çê›íË
         SetPlayerConnectedNumber();
+        _DecideHostorClient.isConnecting = true;
+
     }
 
     private void SetPlayerConnectedNumber()
@@ -31,6 +33,7 @@ public class PhotonNetWorkStarter: MonoBehaviourPunCallbacks
         if (_DecideHostorClient != null)
         {
             _DecideHostorClient.ConnectedNumber = playerIndex;
+            _DecideHostorClient._practiceSet.playerindex = playerIndex;
         }
     }
 

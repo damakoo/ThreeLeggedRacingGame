@@ -66,6 +66,18 @@ MonoBehaviour:
   - UpdateClientPressedOnAllClients
   - UpdateHostPressedOnAllClients
   - RPCGameStartUi
+  - UpdateFirstPressedOnAllClients
+  - UpdateFourthPressedOnAllClients
+  - UpdateSecondPressedOnAllClients
+  - UpdateThirdPressedOnAllClients
+  - UpdateBlackClearedOnAllClients
+  - UpdateClubsOnAllClients
+  - UpdateDiamondsOnAllClients
+  - UpdateHeartsOnAllClients
+  - UpdateRedClearedOnAllClients
+  - UpdateSpadesOnAllClients
+  - RPCMoveAllSuitsInitialPos
+  - UpdateSetPlayerIndexOnAllClients
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

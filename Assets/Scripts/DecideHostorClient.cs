@@ -12,6 +12,8 @@ public class DecideHostorClient : MonoBehaviour
     [SerializeField] GameObject WaitforAnother;
     bool _DecideHostorClient = false;
     public bool isConnecting = false;
+    private bool setplayerindex = false;
+    private bool FindPracticeSet = false;
     public int ConnectedNumber = 0;
     public PracticeSet _practiceSet { get; set; }
 
@@ -45,17 +47,27 @@ public class DecideHostorClient : MonoBehaviour
                 _DecideHostorClient = true;
             }
 
-            if (PhotonNetwork.CurrentRoom.PlayerCount > 3 && _DecideHostorClient)
+
+            if (PhotonNetwork.CurrentRoom.PlayerCount > 3 && _DecideHostorClient && !setplayerindex)
             {
-                if (_BlackJackManager._hostorclient == BlackJackManager.HostorClient.Client)
+                _practiceSet.SetPlayerIndex(ConnectedNumber);
+                setplayerindex = true;
+            }
+            if (setplayerindex && !FindPracticeSet)
+            {
+                PhotonView[] photonviews = FindObjectsOfType<PhotonView>();
+                foreach (var _photonview in photonviews)
                 {
-                    PhotonView[] photonviews = FindObjectsOfType<PhotonView>();
-                    foreach (var _photonview in photonviews)
+                    if (_photonview.gameObject.GetComponent<PracticeSet>().playerindex == 1)
                     {
-                        if (!_photonview.IsMine) _practiceSet = _photonview.gameObject.GetComponent<PracticeSet>();
+                        _practiceSet = _photonview.gameObject.GetComponent<PracticeSet>();
+                        _BlackJackManager.SetPracticeSet(_practiceSet);
+                        FindPracticeSet = true;
                     }
                 }
-                _BlackJackManager.SetPracticeSet(_practiceSet);
+            }
+            if (FindPracticeSet)
+            {
                 if (_BlackJackManager._hostorclient == BlackJackManager.HostorClient.Host)
                 {
                     _BlackJackManager.UpdateParameter();
@@ -63,6 +75,7 @@ public class DecideHostorClient : MonoBehaviour
                 }
                 WaitforAnother.SetActive(false);
                 this.gameObject.SetActive(false);
+
             }
         }
     }

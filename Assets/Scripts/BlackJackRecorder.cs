@@ -19,23 +19,17 @@ public class BlackJackRecorder : MonoBehaviour
     public List<int> MyNumberList { get; set; } = new List<int>();
     public List<int> YourNumberList { get; set; } = new List<int>();
     public List<int> ScoreList { get; set; } = new List<int>();
-    private List<List<int>> MyCardsPracticeList => _PracticeSet.MyCardsPracticeList;
-    private List<List<int>> YourCardsPracticeList => _PracticeSet.YourCardsPracticeList;
-    private List<int> FieldCardsPracticeList => _PracticeSet.FieldCardsPracticeList;
     private int TrialAll => _PracticeSet.TrialAll;
-    private List<float> MySelectedTime => _PracticeSet.MySelectedTime;
-    private List<float> YourSelectedTime => _PracticeSet.YourSelectedTime;
     public int Trial = 1;
     private void FixedUpdate()
     {
         if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.SelectCards)
         {
-            ClubsPos.Add(_PracticeSet.Clubs);
+           ClubsPos.Add(_PracticeSet.Clubs);
             SpadesPos.Add(_PracticeSet.Spades);
             HeartsPos.Add(_PracticeSet.Hearts);
             DiamondsPos.Add(_PracticeSet.Diamonds);
         }
-
 
     }
 

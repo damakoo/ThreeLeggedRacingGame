@@ -42,6 +42,7 @@ public class BlackJackManager : MonoBehaviour
     [SerializeField] WriteLine BlackWriteLine;
     [SerializeField] WriteLine RedWriteLine;
     [SerializeField] GameObject _MovableArea;
+    [SerializeField] float MouseMoveRatio = 30;
     public float AffordedDisntace;
     //[SerializeField] TextMeshProUGUI YourScoreUI;
     public PracticeSet _PracticeSet { get; set; }
@@ -179,7 +180,7 @@ public class BlackJackManager : MonoBehaviour
     void BlackJacking()
     {
         newcursorPosition = Input.mousePosition;
-        DeltacursorPosition = (newcursorPosition - cursorPosition) / 20;
+        DeltacursorPosition = (newcursorPosition - cursorPosition) / MouseMoveRatio;
         BlackDistance = Vector3.Magnitude(_PracticeSet.Clubs - _PracticeSet.Spades);
         RedDistance = Vector3.Magnitude(_PracticeSet.Hearts - _PracticeSet.Diamonds);
 

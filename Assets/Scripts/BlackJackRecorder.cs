@@ -25,10 +25,11 @@ public class BlackJackRecorder : MonoBehaviour
     {
         if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.SelectCards)
         {
+            /*
            ClubsPos.Add(_PracticeSet.Clubs);
             SpadesPos.Add(_PracticeSet.Spades);
             HeartsPos.Add(_PracticeSet.Hearts);
-            DiamondsPos.Add(_PracticeSet.Diamonds);
+            DiamondsPos.Add(_PracticeSet.Diamonds);*/
         }
 
     }

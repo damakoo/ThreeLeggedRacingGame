@@ -179,8 +179,9 @@ public class BlackJackManager : MonoBehaviour
     }
     void BlackJacking()
     {
-        newcursorPosition = Input.mousePosition;
-        DeltacursorPosition = (newcursorPosition - cursorPosition) / MouseMoveRatio;
+        //newcursorPosition = Input.mousePosition;
+        //DeltacursorPosition = (newcursorPosition - cursorPosition);
+        DeltacursorPosition = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"),0) / MouseMoveRatio;
         BlackDistance = Vector3.Magnitude(_PracticeSet.Clubs - _PracticeSet.Spades);
         RedDistance = Vector3.Magnitude(_PracticeSet.Hearts - _PracticeSet.Diamonds);
 
@@ -311,7 +312,7 @@ public class BlackJackManager : MonoBehaviour
 
         BlackWriteLine.WritingLine(Clubs.transform.position, Spades.transform.position);
         RedWriteLine.WritingLine(Hearts.transform.position, Diamonds.transform.position);
-        cursorPosition = newcursorPosition;
+        //cursorPosition = newcursorPosition;
 
     }
     public void GameStartUI()
@@ -426,6 +427,8 @@ public class BlackJackManager : MonoBehaviour
     }
     public void MoveToSelectCards()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         ShowTargetUI.SetActive(false);
         TimeLimitObj.SetActive(false);
         _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.SelectCards;
@@ -440,6 +443,10 @@ public class BlackJackManager : MonoBehaviour
     }
     public void MoveToShowResult()
     {
+        // ロックを解除
+        Cursor.lockState = CursorLockMode.None;
+        // カーソルを表示
+        Cursor.visible = true;
         //YourScoreUI.text = Score.ToString();
         nowTime = 0;
         _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.Finished;

@@ -492,7 +492,7 @@ public class BlackJackManager : MonoBehaviour
 
             // LayerをObstacleに設定
             //square.layer = LayerMask.NameToLayer("Obstacle");
-            if (((MyConnectedNumber == 1 || MyConnectedNumber == 3) && i >= NumberofObstacle) || ((MyConnectedNumber == 2 || MyConnectedNumber == 4) && i < NumberofObstacle)) spriteRenderer.enabled = false;
+            //if (((MyConnectedNumber == 1 || MyConnectedNumber == 3) && i >= NumberofObstacle) || ((MyConnectedNumber == 2 || MyConnectedNumber == 4) && i < NumberofObstacle)) spriteRenderer.enabled = false;
             ObstacleList.Add(square);
         }
 

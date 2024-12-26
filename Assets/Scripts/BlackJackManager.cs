@@ -45,6 +45,7 @@ public class BlackJackManager : MonoBehaviour
     [SerializeField] float MouseMoveRatio = 30;
     [SerializeField] GameObject SpawnArea;
     [SerializeField] int NumberofObstacle = 3;
+    [SerializeField] GameObject ObstaclePrefab;
     public float AffordedDisntace;
     //[SerializeField] TextMeshProUGUI YourScoreUI;
     public PracticeSet _PracticeSet { get; set; }
@@ -179,11 +180,27 @@ public class BlackJackManager : MonoBehaviour
 
     public void UpdateParameter()
     {
-        _PracticeSet.UpdateParameter(SpawnArea.transform.position.x + SpawnArea.transform.localScale.x / 2, SpawnArea.transform.position.y + SpawnArea.transform.localScale.y / 2, 1, 3, 1, 3, NumberofObstacle);
+        _PracticeSet.UpdateParameter((int)(SpawnArea.transform.position.x + SpawnArea.transform.localScale.x / 2) * 100, (int)(SpawnArea.transform.position.y + SpawnArea.transform.localScale.y / 2) * 100, 50, 100, 200, 400, NumberofObstacle);
     }
+
     public void ReUpdateParameter()
     {
-        _PracticeSet.ReUpdateParameter(SpawnArea.transform.position.x + SpawnArea.transform.localScale.x / 2, SpawnArea.transform.position.y + SpawnArea.transform.localScale.y / 2, 1, 3, 1, 3, NumberofObstacle);
+        _PracticeSet.ReUpdateParameter((int)(SpawnArea.transform.position.x + SpawnArea.transform.localScale.x / 2) * 100, (int)(SpawnArea.transform.position.y + SpawnArea.transform.localScale.y / 2) * 100, 50, 100, 200, 400, NumberofObstacle);
+    }
+    // 障害物をすべて削除してリストを初期化する関数
+    public void ClearObstacles()
+    {
+        // リスト内のすべてのオブジェクトをDestroy
+        foreach (var obstacle in ObstacleList)
+        {
+            if (obstacle != null)
+            {
+                Destroy(obstacle);
+            }
+        }
+
+        // リストを初期化
+        ObstacleList = new List<GameObject>();
     }
     public void ReInitializeCard()
     {
@@ -452,29 +469,29 @@ public class BlackJackManager : MonoBehaviour
         TimeLimitObj.transform.position = TimeLimit_notBet.transform.position;
         cursorPosition = Input.mousePosition;
 
-
         for (int i = 0; i < NumberofObstacle * 2; i++)
         {
             // オブジェクトを生成
-            GameObject square = new GameObject($"Square_{i}");
+            GameObject square = Instantiate(ObstaclePrefab, new Vector3(_PracticeSet.SpawnObj_x[i] / 100f - 100f, _PracticeSet.SpawnObj_y[i] / 100f - 100f, 0), Quaternion.identity);
+            Debug.Log("x:"+square.transform.position.x.ToString() + "\n" + "y:" + square.transform.position.y.ToString());
+
             // サイズと位置を設定
-            square.transform.position = new Vector3(_PracticeSet.SpawnObj_x[i], _PracticeSet.SpawnObj_y[i], 0);
-            var spriteRenderer = square.AddComponent<SpriteRenderer>();
-            spriteRenderer.color = Color.gray;
-            square.transform.localScale = new Vector2(_PracticeSet.SpawnObjsize_x[i], _PracticeSet.SpawnObjsize_y[i]);
+            var spriteRenderer = square.GetComponent<SpriteRenderer>();
+            //spriteRenderer.color = Color.white;
+            square.transform.localScale = new Vector2(_PracticeSet.SpawnObjsize_x[i] / 100f, _PracticeSet.SpawnObjsize_y[i] / 100f);
 
             // BoxCollider2Dを追加してサイズを調整
-            var boxCollider = square.AddComponent<BoxCollider2D>();
+            //var boxCollider = square.AddComponent<BoxCollider2D>();
 
             // Rigidbody2Dを追加してパラメータを設定
-            var rb = square.AddComponent<Rigidbody2D>();
+            /*var rb = square.AddComponent<Rigidbody2D>();
             rb.gravityScale = 0;
             rb.mass = 1000000;
             rb.drag = 1000000;
-            rb.angularDrag = 1000000;
+            rb.angularDrag = 1000000;*/
 
             // LayerをObstacleに設定
-            square.layer = LayerMask.NameToLayer("Obstacle");
+            //square.layer = LayerMask.NameToLayer("Obstacle");
             if (((MyConnectedNumber == 1 || MyConnectedNumber == 3) && i >= NumberofObstacle) || ((MyConnectedNumber == 2 || MyConnectedNumber == 4) && i < NumberofObstacle)) spriteRenderer.enabled = false;
             ObstacleList.Add(square);
         }

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Linq;
 
 
-public class PracticeSet: MonoBehaviourPunCallbacks
+public class PracticeSet : MonoBehaviourPunCallbacks
 {
     public int playerindex;
     BlackJackManager _BlackJackManager;
@@ -195,57 +195,57 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     public List<List<int>> MyCardsPracticeList { get; set; } = new List<List<int>>();
     public List<List<int>> YourCardsPracticeList { get; set; } = new List<List<int>>();
     public List<int> FieldCardsPracticeList /*{ get; set; }*/ = new List<int>();
-    public List<float> SpawnObj_x { get; set; } = new List<float>();
-    public List<float> SpawnObj_y { get; set; } = new List<float>();
-    public List<float> SpawnObjsize_x { get; set; } = new List<float>();
-    public List<float> SpawnObjsize_y { get; set; } = new List<float>();
-    public void SetSpawnObjsize_x(List<float> _SpawnObjsize_x)
+    public List<int> SpawnObj_x { get; set; } = new List<int>();
+    public List<int> SpawnObj_y { get; set; } = new List<int>();
+    public List<int> SpawnObjsize_x { get; set; } = new List<int>();
+    public List<int> SpawnObjsize_y { get; set; } = new List<int>();
+    public void SetSpawnObjsize_x(List<int> _SpawnObjsize_x)
     {
-        List<float> temp = _SpawnObjsize_x;
+        List<int> temp = _SpawnObjsize_x;
         SpawnObjsize_x = temp;
-        _PhotonView.RPC("UpdateSpawnObjsize_xOnAllClients", RpcTarget.Others, SerializeObj(_SpawnObjsize_x));
+        _PhotonView.RPC("UpdateSpawnObjsize_xOnAllClients", RpcTarget.Others, SerializeFieldCard(_SpawnObjsize_x));
     }
     [PunRPC]
     void UpdateSpawnObjsize_xOnAllClients(string serializeCards)
     {
         // ここでカードデータを再構築
-        SpawnObjsize_x = DeserializeObj(serializeCards);
+        SpawnObjsize_x = DeserializeFieldCard(serializeCards);
     }
-    public void SetSpawnObjsize_y(List<float> _SpawnObjsize_y)
+    public void SetSpawnObjsize_y(List<int> _SpawnObjsize_y)
     {
-        List<float> temp = _SpawnObjsize_y;
+        List<int> temp = _SpawnObjsize_y;
         SpawnObjsize_y = temp;
-        _PhotonView.RPC("UpdateSpawnObjsize_yOnAllClients", RpcTarget.Others, SerializeObj(_SpawnObjsize_y));
+        _PhotonView.RPC("UpdateSpawnObjsize_yOnAllClients", RpcTarget.Others, SerializeFieldCard(_SpawnObjsize_y));
     }
     [PunRPC]
     void UpdateSpawnObjsize_yOnAllClients(string serializeCards)
     {
         // ここでカードデータを再構築
-        SpawnObjsize_x = DeserializeObj(serializeCards);
+        SpawnObjsize_y = DeserializeFieldCard(serializeCards);
     }
-    public void SetSpawnObj_x(List<float> _SpawnObj_x)
+    public void SetSpawnObj_x(List<int> _SpawnObj_x)
     {
-        List<float> temp = _SpawnObj_x;
+        List<int> temp = _SpawnObj_x;
         SpawnObj_x = temp;
-        _PhotonView.RPC("UpdateSpawnObj_xOnAllClients", RpcTarget.Others, SerializeObj(_SpawnObj_x));
+        _PhotonView.RPC("UpdateSpawnObj_xOnAllClients", RpcTarget.Others, SerializeFieldCard(_SpawnObj_x));
     }
     [PunRPC]
     void UpdateSpawnObj_xOnAllClients(string serializeCards)
     {
         // ここでカードデータを再構築
-        SpawnObj_x = DeserializeObj(serializeCards);
+        SpawnObj_x = DeserializeFieldCard(serializeCards);
     }
-    public void SetSpawnObj_y(List<float> _SpawnObj_y)
+    public void SetSpawnObj_y(List<int> _SpawnObj_y)
     {
-        List<float> temp = _SpawnObj_y;
+        List<int> temp = _SpawnObj_y;
         SpawnObj_y = temp;
-        _PhotonView.RPC("UpdateSpawnObj_yOnAllClients", RpcTarget.Others, SerializeObj(_SpawnObj_y));
+        _PhotonView.RPC("UpdateSpawnObj_yOnAllClients", RpcTarget.Others, SerializeFieldCard(_SpawnObj_y));
     }
     [PunRPC]
     void UpdateSpawnObj_yOnAllClients(string serializeCards)
     {
         // ここでカードデータを再構築
-        SpawnObj_y = DeserializeObj(serializeCards);
+        SpawnObj_y = DeserializeFieldCard(serializeCards);
     }
     public void SetMyCardsPracticeList(List<List<int>> _MyCardsPracticeList)
     {
@@ -308,12 +308,12 @@ public class PracticeSet: MonoBehaviourPunCallbacks
         }
         List<List<int>> cardList = new List<List<int>>();
         // JSON 文字列を int[] の配列に変換
-        for(int i = 0; i<NumberofSet; i++)
+        for (int i = 0; i < NumberofSet; i++)
         {
             List<int> Element = new List<int>();
-            for(int j = 0; j < NumberofCards; j++)
+            for (int j = 0; j < NumberofCards; j++)
             {
-                Element.Add(numbers[i*NumberofCards + j]);
+                Element.Add(numbers[i * NumberofCards + j]);
             }
             cardList.Add(Element);
         }
@@ -352,7 +352,12 @@ public class PracticeSet: MonoBehaviourPunCallbacks
         }
         return numbers;
     }
-
+    // ヘルパークラスを定義
+[System.Serializable]
+public class FloatListWrapper
+{
+    public List<float> floats;
+}
     [System.Serializable]
     private class SerializationWrapper<T>
     {
@@ -443,7 +448,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
 
 
     public int NumberofSet { get; set; } = 5;
-    
+
     List<int> MyCards;
     List<int> YourCards;
     private static int FieldCardsSuit = 0;
@@ -452,36 +457,16 @@ public class PracticeSet: MonoBehaviourPunCallbacks
         _PhotonView = GetComponent<PhotonView>();
         _BlackJackManager = GameObject.FindWithTag("Manager").GetComponent<BlackJackManager>();
     }
-    public void UpdateParameter(float max_x, float max_y, float minsize_x, float maxsize_x, float minsize_y, float maxsize_y, int NumberofObj)
+    public void UpdateParameter(int max_x, int max_y, int minsize_x, int maxsize_x, int minsize_y, int maxsize_y, int NumberofObj)
     {
-        List<float> SpawnObj_x_temp = new List<float>();
-        List<float> SpawnObj_y_temp = new List<float>();
-        List<float> SpawnObjsize_x_temp = new List<float>();
-        List<float> SpawnObjsize_y_temp = new List<float>();
-        for (int i = 0; i < NumberofObj*2; i++)
-        {
-            SpawnObj_x_temp.Add(Random.Range(-max_x, max_x));
-            SpawnObj_y_temp.Add(Random.Range(-max_y, max_y));
-            SpawnObjsize_x_temp.Add(Random.Range(minsize_x, maxsize_x));
-            SpawnObjsize_y_temp.Add(Random.Range(minsize_y, maxsize_y));
-        }
-
-        SetSpawnObj_x(SpawnObj_x_temp);
-        SetSpawnObj_y(SpawnObj_y_temp);
-        SetSpawnObjsize_x(SpawnObjsize_x_temp);
-        SetSpawnObjsize_y(SpawnObjsize_y_temp);
-
-    }
-    public void ReUpdateParameter(float max_x, float max_y, float minsize_x, float maxsize_x, float minsize_y, float maxsize_y, int NumberofObj)
-    {
-        List<float> SpawnObj_x_temp = new List<float>();
-        List<float> SpawnObj_y_temp = new List<float>();
-        List<float> SpawnObjsize_x_temp = new List<float>();
-        List<float> SpawnObjsize_y_temp = new List<float>();
+        List<int> SpawnObj_x_temp = new List<int>();
+        List<int> SpawnObj_y_temp = new List<int>();
+        List<int> SpawnObjsize_x_temp = new List<int>();
+        List<int> SpawnObjsize_y_temp = new List<int>();
         for (int i = 0; i < NumberofObj * 2; i++)
         {
-            SpawnObj_x_temp.Add(Random.Range(-max_x, max_x));
-            SpawnObj_y_temp.Add(Random.Range(-max_y, max_y));
+            SpawnObj_x_temp.Add(Random.Range(-max_x, max_x) + 10000);
+            SpawnObj_y_temp.Add(Random.Range(-max_y, max_y) + 10000);
             SpawnObjsize_x_temp.Add(Random.Range(minsize_x, maxsize_x));
             SpawnObjsize_y_temp.Add(Random.Range(minsize_y, maxsize_y));
         }
@@ -490,7 +475,41 @@ public class PracticeSet: MonoBehaviourPunCallbacks
         SetSpawnObj_y(SpawnObj_y_temp);
         SetSpawnObjsize_x(SpawnObjsize_x_temp);
         SetSpawnObjsize_y(SpawnObjsize_y_temp);
+        ClearObstacles();
 
+    }
+    public void ReUpdateParameter(int max_x, int max_y, int minsize_x, int maxsize_x, int minsize_y, int maxsize_y, int NumberofObj) 
+    {
+        List<int> SpawnObj_x_temp = new List<int>();
+        List<int> SpawnObj_y_temp = new List<int>();
+        List<int> SpawnObjsize_x_temp = new List<int>();
+        List<int> SpawnObjsize_y_temp = new List<int>();
+        for (int i = 0; i < NumberofObj * 2; i++)
+        {
+            SpawnObj_x_temp.Add(Random.Range(-max_x, max_x) + 10000);
+            SpawnObj_y_temp.Add(Random.Range(-max_y, max_y) + 10000);
+            SpawnObjsize_x_temp.Add(Random.Range(minsize_x, maxsize_x));
+            SpawnObjsize_y_temp.Add(Random.Range(minsize_y, maxsize_y));
+        }
+
+        SetSpawnObj_x(SpawnObj_x_temp);
+        SetSpawnObj_y(SpawnObj_y_temp);
+        SetSpawnObjsize_x(SpawnObjsize_x_temp);
+        SetSpawnObjsize_y(SpawnObjsize_y_temp);
+        ClearObstacles();
+
+    }
+
+    public void ClearObstacles()
+    {
+        _BlackJackManager.ClearObstacles();
+        _PhotonView.RPC("RPCClearObstacles", RpcTarget.Others);
+    }
+    [PunRPC]
+    void RPCClearObstacles()
+    {
+        // ここでカードデータを再構築
+        _BlackJackManager.ClearObstacles();
     }
     void ShuffleCards()
     {
@@ -533,7 +552,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
         // ここでカードデータを再構築
         _BlackJackManager.MoveToShowMyCards(1);
     }
-    
+
     public void MoveToSelectCards()
     {
         _BlackJackManager.MoveToSelectCards();
@@ -569,7 +588,7 @@ public class PracticeSet: MonoBehaviourPunCallbacks
     }
     public void MakeReadyHost()
     {
-       _BlackJackManager.MakeReadyHost();
+        _BlackJackManager.MakeReadyHost();
         _PhotonView.RPC("RPCMakeReadyHost", RpcTarget.Others);
     }
     [PunRPC]

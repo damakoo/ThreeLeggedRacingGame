@@ -69,6 +69,8 @@ public class BlackJackManager : MonoBehaviour
     {
         FinishUI.text = "";
         TimeLimitObj_str.text = "";
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
@@ -81,6 +83,7 @@ public class BlackJackManager : MonoBehaviour
             {
                 if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.BeforeStart)
                 {
+                    Cursor.lockState = CursorLockMode.None;
                     StartingGame();
                     if (_PracticeSet.FirstPressed && _PracticeSet.SecondPressed && _PracticeSet.ThirdPressed && _PracticeSet.FourthPressed)
                     {

@@ -78,6 +78,10 @@ MonoBehaviour:
   - UpdateSpadesOnAllClients
   - RPCMoveAllSuitsInitialPos
   - UpdateSetPlayerIndexOnAllClients
+  - UpdateSpawnObj_xOnAllClients
+  - UpdateSpawnObj_yOnAllClients
+  - UpdateSpawnObjsize_xOnAllClients
+  - UpdateSpawnObjsize_yOnAllClients
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

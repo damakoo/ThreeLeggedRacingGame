@@ -83,7 +83,6 @@ public class BlackJackManager : MonoBehaviour
             {
                 if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.BeforeStart)
                 {
-                    Cursor.lockState = CursorLockMode.None;
                     StartingGame();
                     if (_PracticeSet.FirstPressed && _PracticeSet.SecondPressed && _PracticeSet.ThirdPressed && _PracticeSet.FourthPressed)
                     {
@@ -376,6 +375,8 @@ public class BlackJackManager : MonoBehaviour
     }
     void StartingGame()
     {
+        Cursor.lockState = CursorLockMode.None;
+
         // �}�E�X�{�^�����N���b�N���ꂽ���m�F
         if (Input.GetMouseButtonDown(0))
         {

@@ -9,15 +9,16 @@ TagManager:
   - Manager
   - PhotonView
   - Start
+  - Bet
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Suit
   - Water
   - UI
-  - 
-  - 
+  - MovableArea
+  - StartUI
   - 
   - 
   - 

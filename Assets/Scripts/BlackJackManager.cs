@@ -51,7 +51,6 @@ public class BlackJackManager : MonoBehaviour
     public PracticeSet _PracticeSet { get; set; }
     public int MyConnectedNumber { get; set; } = 0;
     public Vector3 cursorPosition { get; set; }
-    Vector3 newcursorPosition;
     Vector3 DeltacursorPosition;
     Vector3 MovedPos;
     float BlackDistance;
@@ -61,6 +60,7 @@ public class BlackJackManager : MonoBehaviour
     Rigidbody2D Heartsrigidbody;
     Rigidbody2D Diamondsrigidbody;
     private List<GameObject> ObstacleList = new List<GameObject>();
+    [SerializeField] bool asymmetry = true;
 
     public enum HostorClient
     {
@@ -180,12 +180,12 @@ public class BlackJackManager : MonoBehaviour
 
     public void UpdateParameter()
     {
-        _PracticeSet.UpdateParameter((int)(SpawnArea.transform.position.x + SpawnArea.transform.localScale.x / 2) * 100, (int)(SpawnArea.transform.position.y + SpawnArea.transform.localScale.y / 2) * 100, 50, 100, 200, 400, NumberofObstacle);
+        _PracticeSet.UpdateParameter((int)(SpawnArea.transform.position.x + SpawnArea.transform.localScale.x / 2) * 100, (int)(SpawnArea.transform.position.y + SpawnArea.transform.localScale.y / 2) * 100, 10, 20, 100, 150, NumberofObstacle, (int)(Diamonds.transform.localScale.x * 100));
     }
 
     public void ReUpdateParameter()
     {
-        _PracticeSet.ReUpdateParameter((int)(SpawnArea.transform.position.x + SpawnArea.transform.localScale.x / 2) * 100, (int)(SpawnArea.transform.position.y + SpawnArea.transform.localScale.y / 2) * 100, 50, 100, 200, 400, NumberofObstacle);
+        _PracticeSet.ReUpdateParameter((int)(SpawnArea.transform.position.x + SpawnArea.transform.localScale.x / 2) * 100, (int)(SpawnArea.transform.position.y + SpawnArea.transform.localScale.y / 2) * 100, 10, 20, 100, 150, NumberofObstacle, (int)(Diamonds.transform.localScale.x * 100));
     }
     // 障害物をすべて削除してリストを初期化する関数
     public void ClearObstacles()
@@ -471,31 +471,90 @@ public class BlackJackManager : MonoBehaviour
 
         for (int i = 0; i < NumberofObstacle * 2; i++)
         {
-            // オブジェクトを生成
-            GameObject square = Instantiate(ObstaclePrefab, new Vector3(_PracticeSet.SpawnObj_x[i] / 100f - 100f, _PracticeSet.SpawnObj_y[i] / 100f - 100f, 0), Quaternion.identity);
-            Debug.Log("x:"+square.transform.position.x.ToString() + "\n" + "y:" + square.transform.position.y.ToString());
-
-            // サイズと位置を設定
-            var spriteRenderer = square.GetComponent<SpriteRenderer>();
-            //spriteRenderer.color = Color.white;
-            square.transform.localScale = new Vector2(_PracticeSet.SpawnObjsize_x[i] / 100f, _PracticeSet.SpawnObjsize_y[i] / 100f);
-
-            // BoxCollider2Dを追加してサイズを調整
-            //var boxCollider = square.AddComponent<BoxCollider2D>();
-
-            // Rigidbody2Dを追加してパラメータを設定
-            /*var rb = square.AddComponent<Rigidbody2D>();
-            rb.gravityScale = 0;
-            rb.mass = 1000000;
-            rb.drag = 1000000;
-            rb.angularDrag = 1000000;*/
-
-            // LayerをObstacleに設定
-            //square.layer = LayerMask.NameToLayer("Obstacle");
-            //if (((MyConnectedNumber == 1 || MyConnectedNumber == 3) && i >= NumberofObstacle) || ((MyConnectedNumber == 2 || MyConnectedNumber == 4) && i < NumberofObstacle)) spriteRenderer.enabled = false;
-            ObstacleList.Add(square);
+            Debug.Log("SpawnObj_x:" + _PracticeSet.SpawnObj_x[i].ToString() + "\n" +
+                "SpawnObj_y1:" + _PracticeSet.SpawnObj_y1[i].ToString() + "\n" +
+                "SpawnObj_y2:" + _PracticeSet.SpawnObj_y2[i].ToString() + "\n" +
+                "SpawnObjsize_x:" + _PracticeSet.SpawnObjsize_x[i].ToString() + "\n" +
+                "SpawnObjsize_y1:" + _PracticeSet.SpawnObjsize_y1[i].ToString() + "\n" +
+                "SpawnObjsize_y2:" + _PracticeSet.SpawnObjsize_y2[i].ToString() + "\n");
         }
 
+        for (int i = 0; i < NumberofObstacle * 2; i++)
+        {
+            float SpawnObj_y1 = Mathf.Max(_PracticeSet.SpawnObj_y1[i], _PracticeSet.SpawnObj_y2[i]) / 100f - 100f;
+            float SpawnObj_y2 = Mathf.Min(_PracticeSet.SpawnObj_y1[i], _PracticeSet.SpawnObj_y2[i]) / 100f - 100f;
+            float SpawnObjsize_y1 = (_PracticeSet.SpawnObj_y1[i] > _PracticeSet.SpawnObj_y2[i] ? _PracticeSet.SpawnObjsize_y1[i] : _PracticeSet.SpawnObjsize_y2[i]) / 100f;
+            float SpawnObjsize_y2 = (_PracticeSet.SpawnObj_y1[i] > _PracticeSet.SpawnObj_y2[i] ? _PracticeSet.SpawnObjsize_y2[i] : _PracticeSet.SpawnObjsize_y1[i]) / 100f;
+            float max_y = SpawnArea.transform.position.y + SpawnArea.transform.localScale.y + 4;
+            float SpawnObj_x = _PracticeSet.SpawnObj_x[i] / 100 - 100;
+            float SpawnObjsize_x = _PracticeSet.SpawnObjsize_x[i] / 100f;
+
+            // ---- 1) 上部オブジェクトを生成 ----
+            //   範囲: [max_y  ~  (穴1の上端)]
+            //   穴1の上端 = SpawnObj_y1 + (SpawnObjsize_y1 / 2)
+            float topHoleBottom = SpawnObj_y1 + (SpawnObjsize_y1 * 0.5f);
+            float topHeight = max_y - topHoleBottom; // 高さ
+            float topCenterY = max_y - (topHeight * 0.5f); // 中心y
+
+            // 高さが負や極端に小さい場合への対策 (必要に応じて変更)
+            if (topHeight > 0f)
+            {
+                SpawnObstacle(SpawnObj_x, topCenterY, topHeight, SpawnObjsize_x,i);
+            }
+
+            // ---- 2) 中央オブジェクトを生成 ----
+            //   範囲: [穴1の下端  ~  穴2の上端]
+            //   穴1の下端 = SpawnObj_y1 - (SpawnObjsize_y1 / 2)
+            //   穴2の上端 = SpawnObj_y2 + (SpawnObjsize_y2 / 2)
+            float hole1Bottom = SpawnObj_y1 - (SpawnObjsize_y1 * 0.5f);
+            float hole2Top = SpawnObj_y2 + (SpawnObjsize_y2 * 0.5f);
+
+            // 上下の順序が逆転している可能性があるため、上と下を判別
+            // （穴1が上側、穴2が下側 という想定なら下記のようにします。
+            //   逆の場合や柔軟に対応したい場合は y1, y2 を比較して分岐してもOKです）
+            float upperHoleBottom = Mathf.Max(hole1Bottom, hole2Top);
+            float lowerHoleTop = Mathf.Min(hole1Bottom, hole2Top);
+
+            // 中央オブジェクトは「上側穴の下端 ~ 下側穴の上端」(大きい値から小さい値を引くとプラスになるよう考慮)
+            float middleHeight = upperHoleBottom - lowerHoleTop;
+            float middleCenterY = (upperHoleBottom + lowerHoleTop) * 0.5f;
+           
+            if (middleHeight > 0f)
+            {
+                SpawnObstacle(SpawnObj_x, middleCenterY, middleHeight, SpawnObjsize_x, i);
+            }
+
+            // ---- 3) 下部オブジェクトを生成 ----
+            //   範囲: [ (穴2の下端)  ~  -max_y]
+            //   穴2の下端 = SpawnObj_y2 - (SpawnObjsize_y2 / 2)
+            float bottomHoleTop = SpawnObj_y2 - (SpawnObjsize_y2 * 0.5f);
+            float bottomHeight = bottomHoleTop - (-max_y);
+            float bottomCenterY = (bottomHoleTop + (-max_y)) * 0.5f;
+
+            if (bottomHeight > 0f)
+            {
+                SpawnObstacle(SpawnObj_x, bottomCenterY, bottomHeight, SpawnObjsize_x, i);
+            }
+        }
+
+    }
+    private void SpawnObstacle(float x, float centerY, float height, float width, int i)
+    {            // オブジェクトを生成
+        GameObject square = Instantiate(
+                        ObstaclePrefab,
+            new Vector3(x, centerY, 0f),
+            Quaternion.identity);
+        square.transform.localScale = new Vector3(width, height, 1);
+        Debug.Log("pos:" + x.ToString() + "," + centerY.ToString() +"\n" + "size:" + width.ToString() + "," + height.ToString());
+
+        // サイズと位置を設定
+        var spriteRenderer = square.GetComponent<SpriteRenderer>();
+
+        //if (asymmetry)
+        //{
+        //    if (((MyConnectedNumber == 1 || MyConnectedNumber == 3) && i >= NumberofObstacle) || ((MyConnectedNumber == 2 || MyConnectedNumber == 4) && i < NumberofObstacle)) spriteRenderer.enabled = false;
+        //}
+        ObstacleList.Add(square);
     }
     public void PhotonMoveToSelectCards()
     {

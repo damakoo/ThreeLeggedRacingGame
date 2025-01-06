@@ -196,9 +196,11 @@ public class PracticeSet : MonoBehaviourPunCallbacks
     public List<List<int>> YourCardsPracticeList { get; set; } = new List<List<int>>();
     public List<int> FieldCardsPracticeList /*{ get; set; }*/ = new List<int>();
     public List<int> SpawnObj_x { get; set; } = new List<int>();
-    public List<int> SpawnObj_y { get; set; } = new List<int>();
+    public List<int> SpawnObj_y1 { get; set; } = new List<int>();
+    public List<int> SpawnObj_y2 { get; set; } = new List<int>();
     public List<int> SpawnObjsize_x { get; set; } = new List<int>();
-    public List<int> SpawnObjsize_y { get; set; } = new List<int>();
+    public List<int> SpawnObjsize_y1 { get; set; } = new List<int>();
+    public List<int> SpawnObjsize_y2 { get; set; } = new List<int>();
     public void SetSpawnObjsize_x(List<int> _SpawnObjsize_x)
     {
         List<int> temp = _SpawnObjsize_x;
@@ -211,17 +213,29 @@ public class PracticeSet : MonoBehaviourPunCallbacks
         // ここでカードデータを再構築
         SpawnObjsize_x = DeserializeFieldCard(serializeCards);
     }
-    public void SetSpawnObjsize_y(List<int> _SpawnObjsize_y)
+    public void SetSpawnObjsize_y1(List<int> _SpawnObjsize_y1)
     {
-        List<int> temp = _SpawnObjsize_y;
-        SpawnObjsize_y = temp;
-        _PhotonView.RPC("UpdateSpawnObjsize_yOnAllClients", RpcTarget.Others, SerializeFieldCard(_SpawnObjsize_y));
+        List<int> temp = _SpawnObjsize_y1;
+        SpawnObjsize_y1 = temp;
+        _PhotonView.RPC("UpdateSpawnObjsize_y1OnAllClients", RpcTarget.Others, SerializeFieldCard(_SpawnObjsize_y1));
     }
     [PunRPC]
-    void UpdateSpawnObjsize_yOnAllClients(string serializeCards)
+    void UpdateSpawnObjsize_y1OnAllClients(string serializeCards)
     {
         // ここでカードデータを再構築
-        SpawnObjsize_y = DeserializeFieldCard(serializeCards);
+        SpawnObjsize_y1 = DeserializeFieldCard(serializeCards);
+    }
+    public void SetSpawnObjsize_y2(List<int> _SpawnObjsize_y2)
+    {
+        List<int> temp = _SpawnObjsize_y2;
+        SpawnObjsize_y2 = temp;
+        _PhotonView.RPC("UpdateSpawnObjsize_y2OnAllClients", RpcTarget.Others, SerializeFieldCard(_SpawnObjsize_y2));
+    }
+    [PunRPC]
+    void UpdateSpawnObjsize_y2OnAllClients(string serializeCards)
+    {
+        // ここでカードデータを再構築
+        SpawnObjsize_y2 = DeserializeFieldCard(serializeCards);
     }
     public void SetSpawnObj_x(List<int> _SpawnObj_x)
     {
@@ -235,17 +249,29 @@ public class PracticeSet : MonoBehaviourPunCallbacks
         // ここでカードデータを再構築
         SpawnObj_x = DeserializeFieldCard(serializeCards);
     }
-    public void SetSpawnObj_y(List<int> _SpawnObj_y)
+    public void SetSpawnObj_y1(List<int> _SpawnObj_y1)
     {
-        List<int> temp = _SpawnObj_y;
-        SpawnObj_y = temp;
-        _PhotonView.RPC("UpdateSpawnObj_yOnAllClients", RpcTarget.Others, SerializeFieldCard(_SpawnObj_y));
+        List<int> temp = _SpawnObj_y1;
+        SpawnObj_y1 = temp;
+        _PhotonView.RPC("UpdateSpawnObj_y1OnAllClients", RpcTarget.Others, SerializeFieldCard(_SpawnObj_y1));
     }
     [PunRPC]
-    void UpdateSpawnObj_yOnAllClients(string serializeCards)
+    void UpdateSpawnObj_y1OnAllClients(string serializeCards)
     {
         // ここでカードデータを再構築
-        SpawnObj_y = DeserializeFieldCard(serializeCards);
+        SpawnObj_y1 = DeserializeFieldCard(serializeCards);
+    }
+    public void SetSpawnObj_y2(List<int> _SpawnObj_y2)
+    {
+        List<int> temp = _SpawnObj_y2;
+        SpawnObj_y2 = temp;
+        _PhotonView.RPC("UpdateSpawnObj_y2OnAllClients", RpcTarget.Others, SerializeFieldCard(_SpawnObj_y2));
+    }
+    [PunRPC]
+    void UpdateSpawnObj_y2OnAllClients(string serializeCards)
+    {
+        // ここでカードデータを再構築
+        SpawnObj_y2 = DeserializeFieldCard(serializeCards);
     }
     public void SetMyCardsPracticeList(List<List<int>> _MyCardsPracticeList)
     {
@@ -353,11 +379,11 @@ public class PracticeSet : MonoBehaviourPunCallbacks
         return numbers;
     }
     // ヘルパークラスを定義
-[System.Serializable]
-public class FloatListWrapper
-{
-    public List<float> floats;
-}
+    [System.Serializable]
+    public class FloatListWrapper
+    {
+        public List<float> floats;
+    }
     [System.Serializable]
     private class SerializationWrapper<T>
     {
@@ -457,49 +483,157 @@ public class FloatListWrapper
         _PhotonView = GetComponent<PhotonView>();
         _BlackJackManager = GameObject.FindWithTag("Manager").GetComponent<BlackJackManager>();
     }
-    public void UpdateParameter(int max_x, int max_y, int minsize_x, int maxsize_x, int minsize_y, int maxsize_y, int NumberofObj)
+    public void UpdateParameter(int max_x, int max_y, int minsize_x, int maxsize_x, int minsize_y, int maxsize_y, int NumberofObj, int ObjectWidth)
     {
-        List<int> SpawnObj_x_temp = new List<int>();
-        List<int> SpawnObj_y_temp = new List<int>();
+        //List<int> SpawnObj_x_temp = new List<int>();
+        List<int> SpawnObj_y1_temp = new List<int>();
+        List<int> SpawnObj_y2_temp = new List<int>();
         List<int> SpawnObjsize_x_temp = new List<int>();
-        List<int> SpawnObjsize_y_temp = new List<int>();
+        List<int> SpawnObjsize_y1_temp = new List<int>();
+        List<int> SpawnObjsize_y2_temp = new List<int>();
         for (int i = 0; i < NumberofObj * 2; i++)
         {
-            SpawnObj_x_temp.Add(Random.Range(-max_x, max_x) + 10000);
-            SpawnObj_y_temp.Add(Random.Range(-max_y, max_y) + 10000);
+            //SpawnObj_x_temp.Add(Random.Range(-max_x, max_x) + 10000);
+            //SpawnObj_y1_temp.Add(Random.Range(-max_y, max_y) + 10000);
+            int SpawnObjsize_y1_temp_1 = Random.Range(minsize_y, maxsize_y);
+            int SpawnObjsize_y1_temp_2 = Random.Range(minsize_y, maxsize_y);
+            SpawnObjsize_y1_temp.Add(SpawnObjsize_y1_temp_1);
+            SpawnObjsize_y2_temp.Add(SpawnObjsize_y1_temp_2);
+            List<int> SpawnObj_ys_temp = new List<int>();
+            if (i % 3 == 0)
+            {
+                SpawnObj_ys_temp = GeneratePositions(-max_y / 3, max_y, 2, Mathf.Max(SpawnObjsize_y1_temp_1, SpawnObjsize_y1_temp_2));
+            }
+            else if (i % 3 == 1)
+            {
+                SpawnObj_ys_temp = GeneratePositions(-max_y, max_y, 2, Mathf.Max(SpawnObjsize_y1_temp_1, SpawnObjsize_y1_temp_2));
+            }
+            else if (i % 3 == 2)
+            {
+                SpawnObj_ys_temp = GeneratePositions(-max_y, max_y / 3, 2, Mathf.Max(SpawnObjsize_y1_temp_1, SpawnObjsize_y1_temp_2));
+            }
+            SpawnObj_y1_temp.Add(SpawnObj_ys_temp[0]);
+            SpawnObj_y2_temp.Add(SpawnObj_ys_temp[1]);
             SpawnObjsize_x_temp.Add(Random.Range(minsize_x, maxsize_x));
-            SpawnObjsize_y_temp.Add(Random.Range(minsize_y, maxsize_y));
+
         }
 
-        SetSpawnObj_x(SpawnObj_x_temp);
-        SetSpawnObj_y(SpawnObj_y_temp);
+        //SetSpawnObj_x(SpawnObj_x_temp);
+        SetSpawnObj_x(GeneratePositions(-max_x, max_x, NumberofObj * 2, (int)(ObjectWidth * 1.5)));
+        SetSpawnObj_y1(SpawnObj_y1_temp);
+        SetSpawnObj_y2(SpawnObj_y2_temp);
         SetSpawnObjsize_x(SpawnObjsize_x_temp);
-        SetSpawnObjsize_y(SpawnObjsize_y_temp);
+        SetSpawnObjsize_y1(SpawnObjsize_y1_temp);
+        SetSpawnObjsize_y2(SpawnObjsize_y2_temp);
         ClearObstacles();
 
     }
-    public void ReUpdateParameter(int max_x, int max_y, int minsize_x, int maxsize_x, int minsize_y, int maxsize_y, int NumberofObj) 
+    public void ReUpdateParameter(int max_x, int max_y, int minsize_x, int maxsize_x, int minsize_y, int maxsize_y, int NumberofObj, int ObjectWidth)
     {
-        List<int> SpawnObj_x_temp = new List<int>();
-        List<int> SpawnObj_y_temp = new List<int>();
+        //List<int> SpawnObj_x_temp = new List<int>();
+        List<int> SpawnObj_y1_temp = new List<int>();
+        List<int> SpawnObj_y2_temp = new List<int>();
         List<int> SpawnObjsize_x_temp = new List<int>();
-        List<int> SpawnObjsize_y_temp = new List<int>();
+        List<int> SpawnObjsize_y1_temp = new List<int>();
+        List<int> SpawnObjsize_y2_temp = new List<int>();
         for (int i = 0; i < NumberofObj * 2; i++)
         {
-            SpawnObj_x_temp.Add(Random.Range(-max_x, max_x) + 10000);
-            SpawnObj_y_temp.Add(Random.Range(-max_y, max_y) + 10000);
+            //SpawnObj_x_temp.Add(Random.Range(-max_x, max_x) + 10000);
+            //SpawnObj_y1_temp.Add(Random.Range(-max_y, max_y) + 10000);
+            int SpawnObjsize_y1_temp_1 = Random.Range(minsize_y, maxsize_y);
+            int SpawnObjsize_y1_temp_2 = Random.Range(minsize_y, maxsize_y);
+            SpawnObjsize_y1_temp.Add(SpawnObjsize_y1_temp_1);
+            SpawnObjsize_y2_temp.Add(SpawnObjsize_y1_temp_2);
+            List<int> SpawnObj_ys_temp = new List<int>();
+            if (i % 3 == 0)
+            {
+                SpawnObj_ys_temp = GeneratePositions(-max_y / 3, max_y, 2, Mathf.Max(SpawnObjsize_y1_temp_1, SpawnObjsize_y1_temp_2));
+            }
+            else if (i % 3 == 1)
+            {
+                SpawnObj_ys_temp = GeneratePositions(-max_y, max_y, 2, Mathf.Max(SpawnObjsize_y1_temp_1, SpawnObjsize_y1_temp_2));
+            }
+            else if (i % 3 == 2)
+            {
+                SpawnObj_ys_temp = GeneratePositions(-max_y, max_y / 3, 2, Mathf.Max(SpawnObjsize_y1_temp_1, SpawnObjsize_y1_temp_2));
+            }
+            SpawnObj_y1_temp.Add(SpawnObj_ys_temp[1]);
+            SpawnObj_y2_temp.Add(SpawnObj_ys_temp[2]);
             SpawnObjsize_x_temp.Add(Random.Range(minsize_x, maxsize_x));
-            SpawnObjsize_y_temp.Add(Random.Range(minsize_y, maxsize_y));
         }
 
-        SetSpawnObj_x(SpawnObj_x_temp);
-        SetSpawnObj_y(SpawnObj_y_temp);
+        //SetSpawnObj_x(SpawnObj_x_temp);
+        SetSpawnObj_x(GeneratePositions(-max_x, max_x, NumberofObj * 2, (int)(ObjectWidth * 1.5)));
+        SetSpawnObj_y1(SpawnObj_y1_temp);
+        SetSpawnObj_y2(SpawnObj_y2_temp);
         SetSpawnObjsize_x(SpawnObjsize_x_temp);
-        SetSpawnObjsize_y(SpawnObjsize_y_temp);
+        SetSpawnObjsize_y1(SpawnObjsize_y1_temp);
+        SetSpawnObjsize_y2(SpawnObjsize_y2_temp);
         ClearObstacles();
 
     }
+    public static List<int> GeneratePositions(int min_x, int max_x, int NumberofObj, int ObjectWidth)
+    {
+        // どうしても結果が揃わない場合、無限ループにならないように上限を設定
+        int maxRetries = 50;
 
+        for (int attempt = 1; attempt <= maxRetries; attempt++)
+        {
+            // 結果を格納するリスト
+            List<int> result = new List<int>();
+
+            // 候補リスト (-max_x 〜 +max_x) に「+10000」加えているのは利用者の都合に合わせる
+            List<int> candidates = new List<int>();
+            for (int i = min_x + 10000; i <= max_x + 10000; i++)
+            {
+                candidates.Add(i);
+            }
+            Debug.Log("rest0:" + candidates.Count.ToString());
+
+            System.Random rand = new System.Random();
+
+            // 候補から条件を満たす要素を追加
+            while (result.Count < NumberofObj && candidates.Count > 0)
+            {
+                // 候補リストからランダムに1つ選ぶ
+                int index = rand.Next(candidates.Count);
+                int chosen = candidates[index];
+
+                // 選んだ数を結果に追加
+                result.Add(chosen);
+                Debug.Log("chosen:" + chosen.ToString());
+
+                Debug.Log("restbefore:" + candidates.Count.ToString());
+                // 削除する値を一時的に格納するリスト
+                List<int> removedValues = candidates.Where(x => Mathf.Abs(x - chosen) < ObjectWidth).ToList();
+
+                // 削除する値を出力
+                Debug.Log($"Removed values: {string.Join(", ", removedValues)}");
+                // 選んだ数の近傍 (± ObjectWidth) にある候補を除去
+                candidates.RemoveAll(x => Mathf.Abs(x - chosen) < ObjectWidth);
+
+                Debug.Log("restafter:" + candidates.Count.ToString());
+            }
+
+            // 目標数取れた場合は成功として返す
+            if (result.Count == NumberofObj)
+            {
+                return result;
+            }
+            else
+            {
+                // リトライする前のログ
+                Debug.LogWarning(
+                    $"GeneratePositions attempt {attempt} failed to get {NumberofObj} positions (got {result.Count}). Retrying..."
+                );
+            }
+        }
+
+        // ここまで来たらリトライ上限を超えても成功しなかった
+        Debug.LogError("GeneratePositions could not find enough positions after all retries.");
+        // 必要に応じて、最後の失敗結果や空のリストなどを返す
+        return new List<int>();
+    }
     public void ClearObstacles()
     {
         _BlackJackManager.ClearObstacles();

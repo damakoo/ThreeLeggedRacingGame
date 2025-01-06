@@ -83,6 +83,10 @@ MonoBehaviour:
   - UpdateSpawnObjsize_xOnAllClients
   - UpdateSpawnObjsize_yOnAllClients
   - RPCClearObstacles
+  - UpdateSpawnObj_y1OnAllClients
+  - UpdateSpawnObj_y2OnAllClients
+  - UpdateSpawnObjsize_y1OnAllClients
+  - UpdateSpawnObjsize_y2OnAllClients
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

@@ -550,10 +550,10 @@ public class BlackJackManager : MonoBehaviour
         // サイズと位置を設定
         var spriteRenderer = square.GetComponent<SpriteRenderer>();
 
-        //if (asymmetry)
-        //{
-        //    if (((MyConnectedNumber == 1 || MyConnectedNumber == 3) && i >= NumberofObstacle) || ((MyConnectedNumber == 2 || MyConnectedNumber == 4) && i < NumberofObstacle)) spriteRenderer.enabled = false;
-        //}
+        if (asymmetry)
+        {
+            if (((MyConnectedNumber == 1 || MyConnectedNumber == 3) && i >= NumberofObstacle) || ((MyConnectedNumber == 2 || MyConnectedNumber == 4) && i < NumberofObstacle)) spriteRenderer.enabled = false;
+        }
         ObstacleList.Add(square);
     }
     public void PhotonMoveToSelectCards()

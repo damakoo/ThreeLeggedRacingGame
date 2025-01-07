@@ -557,9 +557,10 @@ public class PracticeSet : MonoBehaviourPunCallbacks
             {
                 SpawnObj_ys_temp = GeneratePositions(-max_y, max_y / 3, 2, Mathf.Max(SpawnObjsize_y1_temp_1, SpawnObjsize_y1_temp_2));
             }
-            SpawnObj_y1_temp.Add(SpawnObj_ys_temp[1]);
-            SpawnObj_y2_temp.Add(SpawnObj_ys_temp[2]);
+            SpawnObj_y1_temp.Add(SpawnObj_ys_temp[0]);
+            SpawnObj_y2_temp.Add(SpawnObj_ys_temp[1]);
             SpawnObjsize_x_temp.Add(Random.Range(minsize_x, maxsize_x));
+
         }
 
         //SetSpawnObj_x(SpawnObj_x_temp);

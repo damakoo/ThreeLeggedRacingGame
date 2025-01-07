@@ -180,12 +180,12 @@ public class BlackJackManager : MonoBehaviour
 
     public void UpdateParameter()
     {
-        _PracticeSet.UpdateParameter((int)(SpawnArea.transform.position.x + SpawnArea.transform.localScale.x / 2) * 100, (int)(SpawnArea.transform.position.y + SpawnArea.transform.localScale.y / 2) * 100, 10, 20, 100, 150, NumberofObstacle, (int)(Diamonds.transform.localScale.x * 100));
+        _PracticeSet.UpdateParameter((int)(SpawnArea.transform.position.x + SpawnArea.transform.localScale.x / 2) * 100, (int)(SpawnArea.transform.position.y + SpawnArea.transform.localScale.y / 2) * 100, 10, 20, 100, 150, NumberofObstacle, (int)(Diamonds.transform.localScale.x * 80));
     }
 
     public void ReUpdateParameter()
     {
-        _PracticeSet.ReUpdateParameter((int)(SpawnArea.transform.position.x + SpawnArea.transform.localScale.x / 2) * 100, (int)(SpawnArea.transform.position.y + SpawnArea.transform.localScale.y / 2) * 100, 10, 20, 100, 150, NumberofObstacle, (int)(Diamonds.transform.localScale.x * 100));
+        _PracticeSet.ReUpdateParameter((int)(SpawnArea.transform.position.x + SpawnArea.transform.localScale.x / 2) * 100, (int)(SpawnArea.transform.position.y + SpawnArea.transform.localScale.y / 2) * 100, 10, 20, 100, 150, NumberofObstacle, (int)(Diamonds.transform.localScale.x * 80));
     }
     // 障害物をすべて削除してリストを初期化する関数
     public void ClearObstacles()

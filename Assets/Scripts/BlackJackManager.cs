@@ -202,6 +202,16 @@ public class BlackJackManager : MonoBehaviour
         // リストを初期化
         ObstacleList = new List<GameObject>();
     }
+    public void VisibleObstacles(bool _visible)
+    {
+        foreach (var obstacle in ObstacleList)
+        {
+            if (obstacle != null)
+            {
+                obstacle.GetComponent<SpriteRenderer>().enabled = _visible;
+            }
+        }
+    }
     public void ReInitializeCard()
     {
         _cardslist.ReInitializeCards();
@@ -567,6 +577,7 @@ public class BlackJackManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         // カーソルを表示
         Cursor.visible = true;
+        VisibleObstacles(true);
         //YourScoreUI.text = Score.ToString();
         nowTime = 0;
         _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.Finished;

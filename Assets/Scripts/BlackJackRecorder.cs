@@ -92,7 +92,8 @@ public class BlackJackRecorder : MonoBehaviour
         int totalCount = ClubsPos.Count;
 
         // まずはヘッダーを用意
-        string header = "ClubsPos_x,ClubsPos_y,ClubsPos_z,SpadesPos_x,SpadesPos_y,SpadesPos_z,HeartsPos_x,HeartsPos_y,HeartsPos_z,DiamondsPos_x,DiamondsPos_y,DiamondsPos_z,FirstPressing,SecondPressing,ThirdPressing,FourthPressing,FirstPressedTime,SecondPressedTime,ThirdPressedTime,FourthPressedTime,Time,BlackGoaled,RedGoaled,hasobstacle,ClubHeartholepos1x,ClubHeartholepos2x,ClubHeartholepos3x,ClubHeartholesize1x,ClubHeartholesize2x,ClubHeartholesize3x,ClubHeartholepos11y,ClubHeartholepos12y,ClubHeartholepos21y,ClubHeartholepos22y,ClubHeartholepos31y,ClubHeartholepos32y,ClubHeartholesize11y,ClubHeartholesize12y,ClubHeartholesize21y,ClubHeartholesize22y,ClubHeartholesize31y,ClubHeartholesize32y,SpadeDiamondholepos1x,SpadeDiamondholepos2x,SpadeDiamondholepos3x,SpadeDiamondholesize1x,SpadeDiamondholesize2x,SpadeDiamondholesize3x,SpadeDiamondholepos11y,SpadeDiamondholepos12y,SpadeDiamondholepos21y,SpadeDiamondholepos22y,SpadeDiamondholepos31y,SpadeDiamondholepos32y,SpadeDiamondholesize11y,SpadeDiamondholesize12y,SpadeDiamondholesize21y,SpadeDiamondholesize22y,SpadeDiamondholesize31y,SpadeDiamondholesize32y\n";
+        string header = "ClubsPos_x,ClubsPos_y,ClubsPos_z,SpadesPos_x,SpadesPos_y,SpadesPos_z,HeartsPos_x,HeartsPos_y,HeartsPos_z,DiamondsPos_x,DiamondsPos_y,DiamondsPos_z,FirstPressing,SecondPressing,ThirdPressing,FourthPressing,FirstPressedTime,SecondPressedTime,ThirdPressedTime,FourthPressedTime,Time,BlackGoaled,RedGoaled\n";
+        //string header = "ClubsPos_x,ClubsPos_y,ClubsPos_z,SpadesPos_x,SpadesPos_y,SpadesPos_z,HeartsPos_x,HeartsPos_y,HeartsPos_z,DiamondsPos_x,DiamondsPos_y,DiamondsPos_z,FirstPressing,SecondPressing,ThirdPressing,FourthPressing,FirstPressedTime,SecondPressedTime,ThirdPressedTime,FourthPressedTime,Time,BlackGoaled,RedGoaled,hasobstacle,ClubHeartholepos1x,ClubHeartholepos2x,ClubHeartholepos3x,ClubHeartholesize1x,ClubHeartholesize2x,ClubHeartholesize3x,ClubHeartholepos11y,ClubHeartholepos12y,ClubHeartholepos21y,ClubHeartholepos22y,ClubHeartholepos31y,ClubHeartholepos32y,ClubHeartholesize11y,ClubHeartholesize12y,ClubHeartholesize21y,ClubHeartholesize22y,ClubHeartholesize31y,ClubHeartholesize32y,SpadeDiamondholepos1x,SpadeDiamondholepos2x,SpadeDiamondholepos3x,SpadeDiamondholesize1x,SpadeDiamondholesize2x,SpadeDiamondholesize3x,SpadeDiamondholepos11y,SpadeDiamondholepos12y,SpadeDiamondholepos21y,SpadeDiamondholepos22y,SpadeDiamondholepos31y,SpadeDiamondholepos32y,SpadeDiamondholesize11y,SpadeDiamondholesize12y,SpadeDiamondholesize21y,SpadeDiamondholesize22y,SpadeDiamondholesize31y,SpadeDiamondholesize32y\n";
 
         // 何個のファイルに分割するか
         // 例えば 4532行の場合、 1000行ずつ ⇒ 5ファイル（ラストは 532行）
@@ -113,20 +114,31 @@ public class BlackJackRecorder : MonoBehaviour
                 + DiamondsPos[i].x.ToString() + "," + DiamondsPos[i].y.ToString() + "," + DiamondsPos[i].z.ToString() + ","
                 + FirstPressing[i].ToString() + "," + SecondPressing[i].ToString() + "," + ThirdPressing[i].ToString() + "," + FourthPressing[i].ToString() + ","
                 + FirstPressingTime[i].ToString() + "," + SecondPressingTime[i].ToString() + "," + ThirdPressingTime[i].ToString() + "," + FourthPressingTime[i].ToString() + "," + Times[i].ToString() + ","
-                + BlackGoaled[i].ToString() + "," + RedGoaled.ToString() + "," + _BlackJackManager.hasObstacle.ToString() + ","
-                + _PracticeSet.SpawnObj_x[0].ToString() + "," + _PracticeSet.SpawnObj_x[1].ToString() + "," + _PracticeSet.SpawnObj_x[2].ToString() + "," + _PracticeSet.SpawnObjsize_x[0].ToString() + "," + _PracticeSet.SpawnObjsize_x[1].ToString() + "," + _PracticeSet.SpawnObjsize_x[2].ToString() + ","
+                + BlackGoaled[i].ToString() + "," + RedGoaled.ToString() + "," //+ _BlackJackManager.hasObstacle.ToString() + ","
+                //+ _PracticeSet.SpawnObj_x[0].ToString() + "," + _PracticeSet.SpawnObj_x[1].ToString() + "," + _PracticeSet.SpawnObj_x[2].ToString() + "," + _PracticeSet.SpawnObjsize_x[0].ToString() + "," + _PracticeSet.SpawnObjsize_x[1].ToString() + "," + _PracticeSet.SpawnObjsize_x[2].ToString() + ","
+                //+ _PracticeSet.SpawnObj_y1[0].ToString() + "," + _PracticeSet.SpawnObj_y2[0].ToString() + "," + _PracticeSet.SpawnObj_y1[1].ToString() + "," + _PracticeSet.SpawnObj_y2[1].ToString() + "," + _PracticeSet.SpawnObj_y1[2].ToString() + "," + _PracticeSet.SpawnObj_y2[2].ToString() + ","
+                //+ _PracticeSet.SpawnObjsize_y1[0].ToString() + "," + _PracticeSet.SpawnObjsize_y2[0].ToString() + "," + _PracticeSet.SpawnObjsize_y1[1].ToString() + "," + _PracticeSet.SpawnObjsize_y2[1].ToString() + "," + _PracticeSet.SpawnObjsize_y1[2].ToString() + "," + _PracticeSet.SpawnObjsize_y2[2].ToString() + ","
+                //+ _PracticeSet.SpawnObj_x[3].ToString() + "," + _PracticeSet.SpawnObj_x[4].ToString() + "," + _PracticeSet.SpawnObj_x[5].ToString() + "," + _PracticeSet.SpawnObjsize_x[3].ToString() + "," + _PracticeSet.SpawnObjsize_x[4].ToString() + "," + _PracticeSet.SpawnObjsize_x[5].ToString() + ","
+                //+ _PracticeSet.SpawnObj_y1[3].ToString() + "," + _PracticeSet.SpawnObj_y2[3].ToString() + "," + _PracticeSet.SpawnObj_y1[4].ToString() + "," + _PracticeSet.SpawnObj_y2[4].ToString() + "," + _PracticeSet.SpawnObj_y1[5].ToString() + "," + _PracticeSet.SpawnObj_y2[5].ToString() + ","
+                //+ _PracticeSet.SpawnObjsize_y1[3].ToString() + "," + _PracticeSet.SpawnObjsize_y2[3].ToString() + "," + _PracticeSet.SpawnObjsize_y1[4].ToString() + "," + _PracticeSet.SpawnObjsize_y2[4].ToString() + "," + _PracticeSet.SpawnObjsize_y1[5].ToString() + "," + _PracticeSet.SpawnObjsize_y2[5].ToString() + ","
+                + "\n";
+            }
+
+            // ダウンロード (「baseFileName_1.csv」「baseFileName_2.csv」 などの形)
+            string fileName = baseFileName.ToString() + fileIndex.ToString() + ".csv";
+            DownloadFile(fileName, Content);
+        }
+        string resultfilename = baseFileName.ToString() + "result.csv";
+        string content = "hasobstacle,ClubHeartholepos1x,ClubHeartholepos2x,ClubHeartholepos3x,ClubHeartholesize1x,ClubHeartholesize2x,ClubHeartholesize3x,ClubHeartholepos11y,ClubHeartholepos12y,ClubHeartholepos21y,ClubHeartholepos22y,ClubHeartholepos31y,ClubHeartholepos32y,ClubHeartholesize11y,ClubHeartholesize12y,ClubHeartholesize21y,ClubHeartholesize22y,ClubHeartholesize31y,ClubHeartholesize32y,SpadeDiamondholepos1x,SpadeDiamondholepos2x,SpadeDiamondholepos3x,SpadeDiamondholesize1x,SpadeDiamondholesize2x,SpadeDiamondholesize3x,SpadeDiamondholepos11y,SpadeDiamondholepos12y,SpadeDiamondholepos21y,SpadeDiamondholepos22y,SpadeDiamondholepos31y,SpadeDiamondholepos32y,SpadeDiamondholesize11y,SpadeDiamondholesize12y,SpadeDiamondholesize21y,SpadeDiamondholesize22y,SpadeDiamondholesize31y,SpadeDiamondholesize32y,RedGolaedTime,BlackGoaledTime\n"
+                           + _BlackJackManager.hasObstacle.ToString() + "," + _PracticeSet.SpawnObj_x[0].ToString() + "," + _PracticeSet.SpawnObj_x[1].ToString() + "," + _PracticeSet.SpawnObj_x[2].ToString() + "," + _PracticeSet.SpawnObjsize_x[0].ToString() + "," + _PracticeSet.SpawnObjsize_x[1].ToString() + "," + _PracticeSet.SpawnObjsize_x[2].ToString() + ","
                 + _PracticeSet.SpawnObj_y1[0].ToString() + "," + _PracticeSet.SpawnObj_y2[0].ToString() + "," + _PracticeSet.SpawnObj_y1[1].ToString() + "," + _PracticeSet.SpawnObj_y2[1].ToString() + "," + _PracticeSet.SpawnObj_y1[2].ToString() + "," + _PracticeSet.SpawnObj_y2[2].ToString() + ","
                 + _PracticeSet.SpawnObjsize_y1[0].ToString() + "," + _PracticeSet.SpawnObjsize_y2[0].ToString() + "," + _PracticeSet.SpawnObjsize_y1[1].ToString() + "," + _PracticeSet.SpawnObjsize_y2[1].ToString() + "," + _PracticeSet.SpawnObjsize_y1[2].ToString() + "," + _PracticeSet.SpawnObjsize_y2[2].ToString() + ","
                 + _PracticeSet.SpawnObj_x[3].ToString() + "," + _PracticeSet.SpawnObj_x[4].ToString() + "," + _PracticeSet.SpawnObj_x[5].ToString() + "," + _PracticeSet.SpawnObjsize_x[3].ToString() + "," + _PracticeSet.SpawnObjsize_x[4].ToString() + "," + _PracticeSet.SpawnObjsize_x[5].ToString() + ","
                 + _PracticeSet.SpawnObj_y1[3].ToString() + "," + _PracticeSet.SpawnObj_y2[3].ToString() + "," + _PracticeSet.SpawnObj_y1[4].ToString() + "," + _PracticeSet.SpawnObj_y2[4].ToString() + "," + _PracticeSet.SpawnObj_y1[5].ToString() + "," + _PracticeSet.SpawnObj_y2[5].ToString() + ","
                 + _PracticeSet.SpawnObjsize_y1[3].ToString() + "," + _PracticeSet.SpawnObjsize_y2[3].ToString() + "," + _PracticeSet.SpawnObjsize_y1[4].ToString() + "," + _PracticeSet.SpawnObjsize_y2[4].ToString() + "," + _PracticeSet.SpawnObjsize_y1[5].ToString() + "," + _PracticeSet.SpawnObjsize_y2[5].ToString() + ","
-                + "\n";
-            }
+                + Mathf.Min(_PracticeSet.FirstTime, _PracticeSet.SecondTime).ToString() + "," + Mathf.Min(_PracticeSet.ThirdTime, _PracticeSet.FourthTime).ToString();
+        DownloadFile(resultfilename, content);
 
-            // ダウンロード (「baseFileName_1.csv」「baseFileName_2.csv」 などの形)
-            string fileName = $"{baseFileName}_{fileIndex}.csv";
-            DownloadFile(fileName, Content);
-        }
     }
     public void ExportCsv(string wintype)
     {

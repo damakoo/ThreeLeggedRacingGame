@@ -630,20 +630,20 @@ public class BlackJackManager : MonoBehaviour
         //YourScoreUI.text = Score.ToString();
         nowTime = 0;
         _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.Finished;
-        //_blackJackRecorder.ExportCsv(_PracticeSet.BlackCleared ? "Black" : "Red");
+        _blackJackRecorder.ExportCsv(_PracticeSet.BlackCleared ? "Black" : "Red");
         if (MyConnectedNumber == 1 || MyConnectedNumber == 2)
         {
             MyScoreUI.text = "You" + (_PracticeSet.BlackCleared ? "Win!!" : "Lose!!") + "\n"
                 + "Trial: " + _blackJackRecorder.Trial.ToString() + "/" + NumberofSet.ToString() + "\n"
-                + "BlackTime:" + Mathf.Min(_PracticeSet.FirstTime, _PracticeSet.SecondTime).ToString() + "\n"
-                + "RedTime:" + Mathf.Min(_PracticeSet.ThirdTime, _PracticeSet.FourthTime).ToString();
+                + "BlackTime:" + Mathf.Min(_PracticeSet.FirstTime, _PracticeSet.SecondTime).ToString("F1") + "\n"
+                + "RedTime:" + Mathf.Min(_PracticeSet.ThirdTime, _PracticeSet.FourthTime).ToString("F1");
         }
         else if (MyConnectedNumber == 3 || MyConnectedNumber == 4)
         {
             MyScoreUI.text = "You" + (_PracticeSet.RedCleared ? "Win!!" : "Lose!!") + "\n"
                 + "Trial: " + _blackJackRecorder.Trial.ToString() + "/" + NumberofSet.ToString() + "\n"
-                + "BlackTime:" + Mathf.Min(_PracticeSet.FirstTime, _PracticeSet.SecondTime).ToString() + "\n"
-                + "RedTime:" + Mathf.Min(_PracticeSet.ThirdTime, _PracticeSet.FourthTime).ToString();
+                + "BlackTime:" + Mathf.Min(_PracticeSet.FirstTime, _PracticeSet.SecondTime).ToString("F1") + "\n"
+                + "RedTime:" + Mathf.Min(_PracticeSet.ThirdTime, _PracticeSet.FourthTime).ToString("F1");
         }
         //_blackJackRecorder.WriteResult();
         //_blackJackRecorder.ExportCsv();

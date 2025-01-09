@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using static BlackJackManager;
-using Unity.VisualScripting;
-using Photon.Pun.Demo.Cockpit.Forms;
 
 public class BlackJackManager : MonoBehaviour
 {
@@ -173,12 +170,11 @@ public class BlackJackManager : MonoBehaviour
 
             if (_PracticeSet.BlackJackState != PracticeSet.BlackJackStateList.BeforeStart) TimeLimitObj_str.text = "Time: " + Mathf.CeilToInt(_PracticeSet.TimeLeft).ToString();
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
             PressingSpace.SetActive(true);
 
-        }
-        else if (Input.GetKeyUp(KeyCode.Space))
+        }else
         {
             PressingSpace.SetActive(false);
 

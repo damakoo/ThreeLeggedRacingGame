@@ -621,7 +621,6 @@ public class PracticeSet : MonoBehaviourPunCallbacks
 
     List<int> MyCards;
     List<int> YourCards;
-    private static int FieldCardsSuit = 0;
     private void Start()
     {
         _PhotonView = GetComponent<PhotonView>();
@@ -633,6 +632,8 @@ public class PracticeSet : MonoBehaviourPunCallbacks
         SetSecondTime(0);
         SetThirdTime(0);
         SetFourthTime(0);
+        SetRedCleared(false);
+        SetBlackCleared(false);
         //List<int> SpawnObj_x_temp = new List<int>();
         List<int> SpawnObj_y1_temp = new List<int>();
         List<int> SpawnObj_y2_temp = new List<int>();
@@ -678,6 +679,12 @@ public class PracticeSet : MonoBehaviourPunCallbacks
     }
     public void ReUpdateParameter(int max_x, int max_y, int minsize_x, int maxsize_x, int minsize_y, int maxsize_y, int NumberofObj, int ObjectWidth)
     {
+        SetFirstTime(0);
+        SetSecondTime(0);
+        SetThirdTime(0);
+        SetFourthTime(0);
+        SetRedCleared(false);
+        SetBlackCleared(false);
         //List<int> SpawnObj_x_temp = new List<int>();
         List<int> SpawnObj_y1_temp = new List<int>();
         List<int> SpawnObj_y2_temp = new List<int>();

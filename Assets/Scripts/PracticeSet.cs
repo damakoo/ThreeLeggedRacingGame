@@ -19,13 +19,114 @@ public class PracticeSet : MonoBehaviourPunCallbacks
     public bool SecondPressed { get; set; } = false;
     public bool ThirdPressed { get; set; } = false;
     public bool FourthPressed { get; set; } = false;
+    public bool FirstPressing { get; set; } = false;
+    public bool SecondPressing { get; set; } = false;
+    public bool ThirdPressing { get; set; } = false;
+    public bool FourthPressing { get; set; } = false;
+    public float FirstTime { get; set; } = 0;
+    public float SecondTime { get; set; } = 0;
+    public float ThirdTime { get; set; } = 0;
+    public float FourthTime { get; set; } = 0;
+    public float FirstPressedTime { get; set; } = 0;
+    public float SecondPressedTime { get; set; } = 0;
+    public float ThirdPressedTime { get; set; } = 0;
+    public float FourthPressedTime { get; set; } = 0;
     public bool BlackCleared { get; set; } = false;
     public bool RedCleared { get; set; } = false;
 
     public Vector3 Clubs;
     public Vector3 Spades;
     public Vector3 Hearts;
-    public Vector3 Diamonds;
+    public Vector3 Diamonds; public void SetFirstTime(float _FirstTime)
+    {
+        FirstTime = _FirstTime;
+        _PhotonView.RPC("UpdateFirstTimeOnAllClients", RpcTarget.Others, _FirstTime);
+    }
+    [PunRPC]
+    void UpdateFirstTimeOnAllClients(float _FirstTime)
+    {
+        // ここでカードデータを再構築
+        FirstTime = _FirstTime;
+    }
+    public void SetSecondTime(float _SecondTime)
+    {
+        SecondTime = _SecondTime;
+        _PhotonView.RPC("UpdateSecondTimeOnAllClients", RpcTarget.Others, _SecondTime);
+    }
+    [PunRPC]
+    void UpdateSecondTimeOnAllClients(float _SecondTime)
+    {
+        // ここでカードデータを再構築
+        SecondTime = _SecondTime;
+    }
+    public void SetThirdTime(float _ThirdTime)
+    {
+        ThirdTime = _ThirdTime;
+        _PhotonView.RPC("UpdateThirdTimeOnAllClients", RpcTarget.Others, _ThirdTime);
+    }
+    [PunRPC]
+    void UpdateThirdTimeOnAllClients(float _ThirdTime)
+    {
+        // ここでカードデータを再構築
+        ThirdTime = _ThirdTime;
+    }
+    public void SetFourthTime(float _FourthTime)
+    {
+        FourthTime = _FourthTime;
+        _PhotonView.RPC("UpdateFourthTimeOnAllClients", RpcTarget.Others, _FourthTime);
+    }
+    [PunRPC]
+    void UpdateFourthTimeOnAllClients(float _FourthTime)
+    {
+        // ここでカードデータを再構築
+        FourthTime = _FourthTime;
+    }
+
+
+    public void SetFirstPressedTime(float _FirstPressedTime)
+    {
+        FirstPressedTime = _FirstPressedTime;
+        _PhotonView.RPC("UpdateFirstPressedTimeOnAllClients", RpcTarget.Others, _FirstPressedTime);
+    }
+    [PunRPC]
+    void UpdateFirstPressedTimeOnAllClients(float _FirstPressedTime)
+    {
+        // ここでカードデータを再構築
+        FirstPressedTime = _FirstPressedTime;
+    }
+    public void SetSecondPressedTime(float _SecondPressedTime)
+    {
+        SecondPressedTime = _SecondPressedTime;
+        _PhotonView.RPC("UpdateSecondPressedTimeOnAllClients", RpcTarget.Others, _SecondPressedTime);
+    }
+    [PunRPC]
+    void UpdateSecondPressedTimeOnAllClients(float _SecondPressedTime)
+    {
+        // ここでカードデータを再構築
+        SecondPressedTime = _SecondPressedTime;
+    }
+    public void SetThirdPressedTime(float _ThirdPressedTime)
+    {
+        ThirdPressedTime = _ThirdPressedTime;
+        _PhotonView.RPC("UpdateThirdPressedTimeOnAllClients", RpcTarget.Others, _ThirdPressedTime);
+    }
+    [PunRPC]
+    void UpdateThirdPressedTimeOnAllClients(float _ThirdPressedTime)
+    {
+        // ここでカードデータを再構築
+        ThirdPressedTime = _ThirdPressedTime;
+    }
+    public void SetFourthPressedTime(float _FourthPressedTime)
+    {
+        FourthPressedTime = _FourthPressedTime;
+        _PhotonView.RPC("UpdateFourthPressedTimeOnAllClients", RpcTarget.Others, _FourthPressedTime);
+    }
+    [PunRPC]
+    void UpdateFourthPressedTimeOnAllClients(float _FourthPressedTime)
+    {
+        // ここでカードデータを再構築
+        FourthPressedTime = _FourthPressedTime;
+    }
     public void SetClubs(Vector3 Clubpos)
     {
         Clubs = Clubpos;
@@ -77,16 +178,6 @@ public class PracticeSet : MonoBehaviourPunCallbacks
     {
         playerindex = _playerindex;
     }
-    public void SetFirstPressed(bool _FirstPressed)
-    {
-        FirstPressed = _FirstPressed;
-        _PhotonView.RPC("UpdateFirstPressedOnAllClients", RpcTarget.Others, _FirstPressed);
-    }
-    [PunRPC]
-    void UpdateFirstPressedOnAllClients(bool _FirstPressed)
-    {
-        FirstPressed = _FirstPressed;
-    }
     public void SetBlackCleared(bool _BlackCleared)
     {
         BlackCleared = _BlackCleared;
@@ -107,6 +198,17 @@ public class PracticeSet : MonoBehaviourPunCallbacks
     {
         RedCleared = _RedCleared;
     }
+    public void SetFirstPressed(bool _FirstPressed)
+    {
+        FirstPressed = _FirstPressed;
+        _PhotonView.RPC("UpdateFirstPressedOnAllClients", RpcTarget.Others, _FirstPressed);
+    }
+    [PunRPC]
+    void UpdateFirstPressedOnAllClients(bool _FirstPressed)
+    {
+        FirstPressed = _FirstPressed;
+    }
+
     public void SetSecondPressed(bool _SecondPressed)
     {
         SecondPressed = _SecondPressed;
@@ -137,6 +239,48 @@ public class PracticeSet : MonoBehaviourPunCallbacks
     {
         FourthPressed = _FourthPressed;
     }
+    public void SetFirstPressing(bool _FirstPressing)
+    {
+        FirstPressing = _FirstPressing;
+        _PhotonView.RPC("UpdateFirstPressingOnAllClients", RpcTarget.Others, _FirstPressing);
+    }
+    [PunRPC]
+    void UpdateFirstPressingOnAllClients(bool _FirstPressing)
+    {
+        FirstPressing = _FirstPressing;
+    }
+
+    public void SetSecondPressing(bool _SecondPressing)
+    {
+        SecondPressing = _SecondPressing;
+        _PhotonView.RPC("UpdateSecondPressingOnAllClients", RpcTarget.Others, _SecondPressing);
+    }
+    [PunRPC]
+    void UpdateSecondPressingOnAllClients(bool _SecondPressing)
+    {
+        SecondPressing = _SecondPressing;
+    }
+    public void SetThirdPressing(bool _ThirdPressing)
+    {
+        ThirdPressing = _ThirdPressing;
+        _PhotonView.RPC("UpdateThirdPressingOnAllClients", RpcTarget.Others, _ThirdPressing);
+    }
+    [PunRPC]
+    void UpdateThirdPressingOnAllClients(bool _ThirdPressing)
+    {
+        ThirdPressing = _ThirdPressing;
+    }
+    public void SetFourthPressing(bool _FourthPressing)
+    {
+        FourthPressing = _FourthPressing;
+        _PhotonView.RPC("UpdateFourthPressingOnAllClients", RpcTarget.Others, _FourthPressing);
+    }
+    [PunRPC]
+    void UpdateFourthPressingOnAllClients(bool _FourthPressing)
+    {
+        FourthPressing = _FourthPressing;
+    }
+
     public void SetTimeLeft(float _timeleft)
     {
         TimeLeft = _timeleft;
@@ -485,6 +629,10 @@ public class PracticeSet : MonoBehaviourPunCallbacks
     }
     public void UpdateParameter(int max_x, int max_y, int minsize_x, int maxsize_x, int minsize_y, int maxsize_y, int NumberofObj, int ObjectWidth)
     {
+        SetFirstTime(0);
+        SetSecondTime(0);
+        SetThirdTime(0);
+        SetFourthTime(0);
         //List<int> SpawnObj_x_temp = new List<int>();
         List<int> SpawnObj_y1_temp = new List<int>();
         List<int> SpawnObj_y2_temp = new List<int>();

@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using static BlackJackManager;
 using Unity.VisualScripting;
+using Photon.Pun.Demo.Cockpit.Forms;
 
 public class BlackJackManager : MonoBehaviour
 {
@@ -46,7 +47,9 @@ public class BlackJackManager : MonoBehaviour
     [SerializeField] GameObject SpawnArea;
     [SerializeField] int NumberofObstacle = 3;
     [SerializeField] GameObject ObstaclePrefab;
+    [SerializeField] GameObject PressingSpace;
     public float AffordedDisntace;
+    public bool hasObstacle = true;
     //[SerializeField] TextMeshProUGUI YourScoreUI;
     public PracticeSet _PracticeSet { get; set; }
     public int MyConnectedNumber { get; set; } = 0;
@@ -74,6 +77,7 @@ public class BlackJackManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        PressingSpace.SetActive(false);
         FinishUI.text = "";
         TimeLimitObj_str.text = "";
 
@@ -85,7 +89,7 @@ public class BlackJackManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //Debug.Log("x:" + Input.mousePosition.x.ToString() + "\n" + "y:" + Input.mousePosition.y.ToString() + "\n" + "z:" + Input.mousePosition.z.ToString());
         if (hasPracticeSet)
@@ -108,7 +112,7 @@ public class BlackJackManager : MonoBehaviour
                 else if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.WaitForNextTrial)
                 {
                     //if (Input.GetKeyDown(KeyCode.Space)) MoveToShowMyCards();
-                    nowTime += Time.deltaTime;
+                    nowTime += Time.fixedDeltaTime;
                     _PracticeSet.SetTimeLeft(WaitingTime - nowTime);
                     if (nowTime > WaitingTime)
                     {
@@ -134,7 +138,7 @@ public class BlackJackManager : MonoBehaviour
                 else if (_PracticeSet.BlackJackState == PracticeSet.BlackJackStateList.ShowResult)
                 {
                     //if (Input.GetKeyDown(KeyCode.Space)) MoveToWaitForNextTrial();
-                    nowTime += Time.deltaTime;
+                    nowTime += Time.fixedDeltaTime;
                     _PracticeSet.SetTimeLeft(ResultsTime - nowTime);
                     if (nowTime > ResultsTime)
                     {
@@ -169,6 +173,17 @@ public class BlackJackManager : MonoBehaviour
 
             if (_PracticeSet.BlackJackState != PracticeSet.BlackJackStateList.BeforeStart) TimeLimitObj_str.text = "Time: " + Mathf.CeilToInt(_PracticeSet.TimeLeft).ToString();
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            PressingSpace.SetActive(true);
+
+        }
+        else if (Input.GetKeyUp(KeyCode.Space))
+        {
+            PressingSpace.SetActive(false);
+
+        }
+
     }
     public void SetPracticeSet(PracticeSet _practiceset)
     {
@@ -223,8 +238,10 @@ public class BlackJackManager : MonoBehaviour
         DeltacursorPosition = new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0) / MouseMoveRatio;
         BlackDistance = Vector3.Magnitude(_PracticeSet.Clubs - _PracticeSet.Spades);
         RedDistance = Vector3.Magnitude(_PracticeSet.Hearts - _PracticeSet.Diamonds);
+        nowTime += Time.fixedDeltaTime;
 
-        if (MyConnectedNumber == 1)
+
+        if (MyConnectedNumber == 1 && !_PracticeSet.BlackCleared)
         {
             if (_PracticeSet.Clubs.x < StartLinePos.transform.position.x && _PracticeSet.Clubs.x + DeltacursorPosition.x > StartLinePos.transform.position.x)
             {
@@ -242,8 +259,18 @@ public class BlackJackManager : MonoBehaviour
                 MovedPos = _PracticeSet.Clubs + DeltacursorPosition;
             }
             _PracticeSet.SetClubs(MoveSuitWithinFrame(MovedPos));
+            _PracticeSet.SetFirstTime(nowTime);
+            if (Input.GetKey(KeyCode.Space))
+            {
+                _PracticeSet.SetFirstPressedTime(Time.deltaTime+_PracticeSet.FirstPressedTime);
+                _PracticeSet.SetFirstPressing(true);
+            }
+            else
+            {
+                _PracticeSet.SetFirstPressing(false);
+            }
         }
-        else if (MyConnectedNumber == 2)
+        else if (MyConnectedNumber == 2 && !_PracticeSet.BlackCleared)
         {
             if (_PracticeSet.Spades.x < StartLinePos.transform.position.x && _PracticeSet.Spades.x + DeltacursorPosition.x > StartLinePos.transform.position.x)
             {
@@ -261,8 +288,18 @@ public class BlackJackManager : MonoBehaviour
                 MovedPos = _PracticeSet.Spades + DeltacursorPosition;
             }
             _PracticeSet.SetSpades(MoveSuitWithinFrame(MovedPos));
+            _PracticeSet.SetSecondTime(nowTime);
+            if (Input.GetKey(KeyCode.Space))
+            {
+                _PracticeSet.SetSecondPressedTime(Time.deltaTime + _PracticeSet.SecondPressedTime);
+                _PracticeSet.SetSecondPressing(true);
+            }
+            else
+            {
+                _PracticeSet.SetSecondPressing(false);
+            }
         }
-        else if (MyConnectedNumber == 3)
+        else if (MyConnectedNumber == 3 && !_PracticeSet.RedCleared)
         {
             if (_PracticeSet.Hearts.x < StartLinePos.transform.position.x && _PracticeSet.Hearts.x + DeltacursorPosition.x > StartLinePos.transform.position.x)
             {
@@ -280,8 +317,18 @@ public class BlackJackManager : MonoBehaviour
                 MovedPos = _PracticeSet.Hearts + DeltacursorPosition;
             }
             _PracticeSet.SetHearts(MoveSuitWithinFrame(MovedPos));
+            _PracticeSet.SetThirdTime(nowTime);
+            if (Input.GetKey(KeyCode.Space))
+            {
+                _PracticeSet.SetThirdPressedTime(Time.deltaTime + _PracticeSet.ThirdPressedTime);
+                _PracticeSet.SetThirdPressing(true);
+            }
+            else
+            {
+                _PracticeSet.SetThirdPressing(false);
+            }
         }
-        else if (MyConnectedNumber == 4)
+        else if (MyConnectedNumber == 4 && !_PracticeSet.RedCleared)
         {
             if (_PracticeSet.Diamonds.x < StartLinePos.transform.position.x && _PracticeSet.Diamonds.x + DeltacursorPosition.x > StartLinePos.transform.position.x)
             {
@@ -299,6 +346,16 @@ public class BlackJackManager : MonoBehaviour
                 MovedPos = _PracticeSet.Diamonds + DeltacursorPosition;
             }
             _PracticeSet.SetDiamonds(MoveSuitWithinFrame(MovedPos));
+            _PracticeSet.SetFourthTime(nowTime);
+            if (Input.GetKey(KeyCode.Space))
+            {
+                _PracticeSet.SetFourthPressedTime(Time.deltaTime + _PracticeSet.FourthPressedTime);
+                _PracticeSet.SetFourthPressing(true);
+            }
+            else
+            {
+                _PracticeSet.SetFourthPressing(false);
+            }
         }
 
         if (_hostorclient == HostorClient.Host)
@@ -313,12 +370,6 @@ public class BlackJackManager : MonoBehaviour
                 }
             }
 
-
-            if (_PracticeSet.Hearts.x > GoalLinepos.transform.position.x || _PracticeSet.Diamonds.x > GoalLinepos.transform.position.x)
-            {
-                _PracticeSet.SetRedCleared(true);
-            }
-
             if (_PracticeSet.Hearts.x > StartLinePos.transform.position.x || _PracticeSet.Diamonds.x > StartLinePos.transform.position.x)
             {
                 if (RedDistance > AffordedDisntace)
@@ -328,19 +379,19 @@ public class BlackJackManager : MonoBehaviour
                 }
             }
 
-
-
             if (_PracticeSet.Clubs.x > GoalLinepos.transform.position.x || _PracticeSet.Spades.x > GoalLinepos.transform.position.x)
             {
                 _PracticeSet.SetBlackCleared(true);
-                PhotonMoveToShowResult();
             }
 
             if (_PracticeSet.Hearts.x > GoalLinepos.transform.position.x || _PracticeSet.Diamonds.x > GoalLinepos.transform.position.x)
             {
                 _PracticeSet.SetRedCleared(true);
-                PhotonMoveToShowResult();
 
+            }
+            if(_PracticeSet.RedCleared && _PracticeSet.BlackCleared)
+            {
+                PhotonMoveToShowResult();
             }
         }
 
@@ -478,8 +529,9 @@ public class BlackJackManager : MonoBehaviour
         _PracticeSet.BlackJackState = PracticeSet.BlackJackStateList.SelectCards;
         TimeLimitObj.transform.position = TimeLimit_notBet.transform.position;
         cursorPosition = Input.mousePosition;
+        nowTime = 0;
 
-        for (int i = 0; i < NumberofObstacle * 2; i++)
+        /*for (int i = 0; i < NumberofObstacle * 2; i++)
         {
             Debug.Log("SpawnObj_x:" + _PracticeSet.SpawnObj_x[i].ToString() + "\n" +
                 "SpawnObj_y1:" + _PracticeSet.SpawnObj_y1[i].ToString() + "\n" +
@@ -487,66 +539,67 @@ public class BlackJackManager : MonoBehaviour
                 "SpawnObjsize_x:" + _PracticeSet.SpawnObjsize_x[i].ToString() + "\n" +
                 "SpawnObjsize_y1:" + _PracticeSet.SpawnObjsize_y1[i].ToString() + "\n" +
                 "SpawnObjsize_y2:" + _PracticeSet.SpawnObjsize_y2[i].ToString() + "\n");
-        }
-
-        for (int i = 0; i < NumberofObstacle * 2; i++)
+        }*/
+        if (hasObstacle)
         {
-            float SpawnObj_y1 = Mathf.Max(_PracticeSet.SpawnObj_y1[i], _PracticeSet.SpawnObj_y2[i]) / 100f - 100f;
-            float SpawnObj_y2 = Mathf.Min(_PracticeSet.SpawnObj_y1[i], _PracticeSet.SpawnObj_y2[i]) / 100f - 100f;
-            float SpawnObjsize_y1 = (_PracticeSet.SpawnObj_y1[i] > _PracticeSet.SpawnObj_y2[i] ? _PracticeSet.SpawnObjsize_y1[i] : _PracticeSet.SpawnObjsize_y2[i]) / 100f;
-            float SpawnObjsize_y2 = (_PracticeSet.SpawnObj_y1[i] > _PracticeSet.SpawnObj_y2[i] ? _PracticeSet.SpawnObjsize_y2[i] : _PracticeSet.SpawnObjsize_y1[i]) / 100f;
-            float max_y = SpawnArea.transform.position.y + SpawnArea.transform.localScale.y + 4;
-            float SpawnObj_x = _PracticeSet.SpawnObj_x[i] / 100 - 100;
-            float SpawnObjsize_x = _PracticeSet.SpawnObjsize_x[i] / 100f;
-
-            // ---- 1) 上部オブジェクトを生成 ----
-            //   範囲: [max_y  ~  (穴1の上端)]
-            //   穴1の上端 = SpawnObj_y1 + (SpawnObjsize_y1 / 2)
-            float topHoleBottom = SpawnObj_y1 + (SpawnObjsize_y1 * 0.5f);
-            float topHeight = max_y - topHoleBottom; // 高さ
-            float topCenterY = max_y - (topHeight * 0.5f); // 中心y
-
-            // 高さが負や極端に小さい場合への対策 (必要に応じて変更)
-            if (topHeight > 0f)
+            for (int i = 0; i < NumberofObstacle * 2; i++)
             {
-                SpawnObstacle(SpawnObj_x, topCenterY, topHeight, SpawnObjsize_x,i);
-            }
+                float SpawnObj_y1 = Mathf.Max(_PracticeSet.SpawnObj_y1[i], _PracticeSet.SpawnObj_y2[i]) / 100f - 100f;
+                float SpawnObj_y2 = Mathf.Min(_PracticeSet.SpawnObj_y1[i], _PracticeSet.SpawnObj_y2[i]) / 100f - 100f;
+                float SpawnObjsize_y1 = (_PracticeSet.SpawnObj_y1[i] > _PracticeSet.SpawnObj_y2[i] ? _PracticeSet.SpawnObjsize_y1[i] : _PracticeSet.SpawnObjsize_y2[i]) / 100f;
+                float SpawnObjsize_y2 = (_PracticeSet.SpawnObj_y1[i] > _PracticeSet.SpawnObj_y2[i] ? _PracticeSet.SpawnObjsize_y2[i] : _PracticeSet.SpawnObjsize_y1[i]) / 100f;
+                float max_y = SpawnArea.transform.position.y + SpawnArea.transform.localScale.y + 4;
+                float SpawnObj_x = _PracticeSet.SpawnObj_x[i] / 100 - 100;
+                float SpawnObjsize_x = _PracticeSet.SpawnObjsize_x[i] / 100f;
 
-            // ---- 2) 中央オブジェクトを生成 ----
-            //   範囲: [穴1の下端  ~  穴2の上端]
-            //   穴1の下端 = SpawnObj_y1 - (SpawnObjsize_y1 / 2)
-            //   穴2の上端 = SpawnObj_y2 + (SpawnObjsize_y2 / 2)
-            float hole1Bottom = SpawnObj_y1 - (SpawnObjsize_y1 * 0.5f);
-            float hole2Top = SpawnObj_y2 + (SpawnObjsize_y2 * 0.5f);
+                // ---- 1) 上部オブジェクトを生成 ----
+                //   範囲: [max_y  ~  (穴1の上端)]
+                //   穴1の上端 = SpawnObj_y1 + (SpawnObjsize_y1 / 2)
+                float topHoleBottom = SpawnObj_y1 + (SpawnObjsize_y1 * 0.5f);
+                float topHeight = max_y - topHoleBottom; // 高さ
+                float topCenterY = max_y - (topHeight * 0.5f); // 中心y
 
-            // 上下の順序が逆転している可能性があるため、上と下を判別
-            // （穴1が上側、穴2が下側 という想定なら下記のようにします。
-            //   逆の場合や柔軟に対応したい場合は y1, y2 を比較して分岐してもOKです）
-            float upperHoleBottom = Mathf.Max(hole1Bottom, hole2Top);
-            float lowerHoleTop = Mathf.Min(hole1Bottom, hole2Top);
+                // 高さが負や極端に小さい場合への対策 (必要に応じて変更)
+                if (topHeight > 0f)
+                {
+                    SpawnObstacle(SpawnObj_x, topCenterY, topHeight, SpawnObjsize_x, i);
+                }
 
-            // 中央オブジェクトは「上側穴の下端 ~ 下側穴の上端」(大きい値から小さい値を引くとプラスになるよう考慮)
-            float middleHeight = upperHoleBottom - lowerHoleTop;
-            float middleCenterY = (upperHoleBottom + lowerHoleTop) * 0.5f;
-           
-            if (middleHeight > 0f)
-            {
-                SpawnObstacle(SpawnObj_x, middleCenterY, middleHeight, SpawnObjsize_x, i);
-            }
+                // ---- 2) 中央オブジェクトを生成 ----
+                //   範囲: [穴1の下端  ~  穴2の上端]
+                //   穴1の下端 = SpawnObj_y1 - (SpawnObjsize_y1 / 2)
+                //   穴2の上端 = SpawnObj_y2 + (SpawnObjsize_y2 / 2)
+                float hole1Bottom = SpawnObj_y1 - (SpawnObjsize_y1 * 0.5f);
+                float hole2Top = SpawnObj_y2 + (SpawnObjsize_y2 * 0.5f);
 
-            // ---- 3) 下部オブジェクトを生成 ----
-            //   範囲: [ (穴2の下端)  ~  -max_y]
-            //   穴2の下端 = SpawnObj_y2 - (SpawnObjsize_y2 / 2)
-            float bottomHoleTop = SpawnObj_y2 - (SpawnObjsize_y2 * 0.5f);
-            float bottomHeight = bottomHoleTop - (-max_y);
-            float bottomCenterY = (bottomHoleTop + (-max_y)) * 0.5f;
+                // 上下の順序が逆転している可能性があるため、上と下を判別
+                // （穴1が上側、穴2が下側 という想定なら下記のようにします。
+                //   逆の場合や柔軟に対応したい場合は y1, y2 を比較して分岐してもOKです）
+                float upperHoleBottom = Mathf.Max(hole1Bottom, hole2Top);
+                float lowerHoleTop = Mathf.Min(hole1Bottom, hole2Top);
 
-            if (bottomHeight > 0f)
-            {
-                SpawnObstacle(SpawnObj_x, bottomCenterY, bottomHeight, SpawnObjsize_x, i);
+                // 中央オブジェクトは「上側穴の下端 ~ 下側穴の上端」(大きい値から小さい値を引くとプラスになるよう考慮)
+                float middleHeight = upperHoleBottom - lowerHoleTop;
+                float middleCenterY = (upperHoleBottom + lowerHoleTop) * 0.5f;
+
+                if (middleHeight > 0f)
+                {
+                    SpawnObstacle(SpawnObj_x, middleCenterY, middleHeight, SpawnObjsize_x, i);
+                }
+
+                // ---- 3) 下部オブジェクトを生成 ----
+                //   範囲: [ (穴2の下端)  ~  -max_y]
+                //   穴2の下端 = SpawnObj_y2 - (SpawnObjsize_y2 / 2)
+                float bottomHoleTop = SpawnObj_y2 - (SpawnObjsize_y2 * 0.5f);
+                float bottomHeight = bottomHoleTop - (-max_y);
+                float bottomCenterY = (bottomHoleTop + (-max_y)) * 0.5f;
+
+                if (bottomHeight > 0f)
+                {
+                    SpawnObstacle(SpawnObj_x, bottomCenterY, bottomHeight, SpawnObjsize_x, i);
+                }
             }
         }
-
     }
     private void SpawnObstacle(float x, float centerY, float height, float width, int i)
     {            // オブジェクトを生成
@@ -584,11 +637,17 @@ public class BlackJackManager : MonoBehaviour
         _blackJackRecorder.ExportCsv(_PracticeSet.BlackCleared ? "Black" : "Red");
         if (MyConnectedNumber == 1 || MyConnectedNumber == 2)
         {
-            MyScoreUI.text = "You" + (_PracticeSet.BlackCleared ? "Win!!" : "Lose!!") + "\n" + "Trial: " + _blackJackRecorder.Trial.ToString() + "/" + NumberofSet.ToString();
+            MyScoreUI.text = "You" + (_PracticeSet.BlackCleared ? "Win!!" : "Lose!!") + "\n"
+                + "Trial: " + _blackJackRecorder.Trial.ToString() + "/" + NumberofSet.ToString() + "\n"
+                + "BlackTime:" + Mathf.Min(_PracticeSet.FirstTime, _PracticeSet.SecondTime).ToString() + "\n"
+                + "RedTime:" + Mathf.Min(_PracticeSet.ThirdTime, _PracticeSet.FourthTime).ToString();
         }
         else if (MyConnectedNumber == 3 || MyConnectedNumber == 4)
         {
-            MyScoreUI.text = "You" + (_PracticeSet.RedCleared ? "Win!!" : "Lose!!") + "\n" + "Trial: " + _blackJackRecorder.Trial.ToString() + "/" + NumberofSet.ToString();
+            MyScoreUI.text = "You" + (_PracticeSet.RedCleared ? "Win!!" : "Lose!!") + "\n"
+                + "Trial: " + _blackJackRecorder.Trial.ToString() + "/" + NumberofSet.ToString() + "\n"
+                + "BlackTime:" + Mathf.Min(_PracticeSet.FirstTime, _PracticeSet.SecondTime).ToString() + "\n"
+                + "RedTime:" + Mathf.Min(_PracticeSet.ThirdTime, _PracticeSet.FourthTime).ToString();
         }
         //_blackJackRecorder.WriteResult();
         //_blackJackRecorder.ExportCsv();

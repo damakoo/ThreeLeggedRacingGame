@@ -1391,7 +1391,7 @@ MonoBehaviour:
   ObstaclePrefab: {fileID: 306695649384755424, guid: 7329fc5e9694b9f45af2d1ed3d7c45bb, type: 3}
   PressingSpace: {fileID: 217325044}
   AffordedDisntace: 1.4
-  hasObstacle: 1
+  hasObstacle: 0
   asymmetry: 1
 --- !u!4 &603039266
 Transform:

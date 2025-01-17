@@ -45,6 +45,8 @@ public class BlackJackManager : MonoBehaviour
     [SerializeField] int NumberofObstacle = 3;
     [SerializeField] GameObject ObstaclePrefab;
     [SerializeField] GameObject PressingSpace;
+    [SerializeField] LayerMask obstacleLayer; // ObstacleのLayerを設定する
+
     public float AffordedDisntace;
     public bool hasObstacle = true;
     //[SerializeField] TextMeshProUGUI YourScoreUI;
@@ -177,7 +179,6 @@ public class BlackJackManager : MonoBehaviour
         }else
         {
             PressingSpace.SetActive(false);
-
         }
 
     }

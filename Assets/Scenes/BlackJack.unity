@@ -1390,6 +1390,9 @@ MonoBehaviour:
   NumberofObstacle: 3
   ObstaclePrefab: {fileID: 306695649384755424, guid: 7329fc5e9694b9f45af2d1ed3d7c45bb, type: 3}
   PressingSpace: {fileID: 217325044}
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 256
   AffordedDisntace: 1.4
   hasObstacle: 1
   asymmetry: 1
